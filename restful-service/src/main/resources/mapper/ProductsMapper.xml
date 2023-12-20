@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outliercart.restfulservice.repository.ProductsDao">
+
+    <sql id="searchSql">
+        <choose>
+            <when test="searchType == null or searchType == ''">
+                <choose>
+                    <when test="searchContent != null and searchContent != ''">
+                        WHERE CONCAT(product_name, product_price, product_content) LIKE CONCAT('%', #{searchContent}, '%')
+                    </when>
+                    <otherwise>
+                        <!-- searchContent가 null 또는 빈 문자열인 경우 모든 열에서 검색 -->
+                        WHERE CONCAT(product_name, product_price, product_content) LIKE '%%'
+                    </otherwise>
+                </choose>
+            </when>
+            <otherwise>
+                <choose>
+                    <when test="searchType == 1">
+                        <!-- product_name 검색 조건 -->
+                        WHERE product_name LIKE CONCAT('%', #{searchContent}, '%')
+                    </when>
+                    <when test="searchType == 2">
+                        <!-- product_price 검색 조건 -->
+                        WHERE product_price LIKE CONCAT('%', #{searchContent}, '%')
+                    </when>
+                    <when test="searchType == 3">
+                        <!-- product_content 검색 조건 -->
+                        WHERE product_content LIKE CONCAT('%', #{searchContent}, '%')
+                    </when>
+                    <otherwise>
+                        <!-- searchType이 1, 2, 3이 아닌 경우 -->
+                        WHERE CONCAT(product_name , product_price , product_content) LIKE CONCAT('%', #{searchContent}, '%')
+                    </otherwise>
+                </choose>
+            </otherwise>
+        </choose>
+    </sql>
+
+    <insert id="save" parameterType="ProductsRegisterDTO" useGeneratedKeys="true" keyProperty="productNo">
+        INSERT INTO PRODUCTS
+        (product_name, product_price, product_quantity, product_content)
+        VALUES
+        (#{productName}, #{productPrice}, #{productQuantity}, #{productContent})
+    </insert>
+
+    <select id="allProductsCount" parameterType="PageInfo" resultType="int">
+        SELECT COUNT(*)
+        FROM PRODUCTS
+        <include refid="searchSql"/>
+    </select>
+
+    <select id="allProductsPosts" parameterType="PageInfo" resultType="ProductsRegisterDTO">
+        SELECT ROW_NUMBER() OVER (ORDER BY p.product_no DESC) AS productNum, p.*
+        FROM PRODUCTS p
+        <include refid="searchSql"/>
+        LIMIT #{offset},#{pageLimit}
+    </select>
+
+    <select id="singleProductsPosts" parameterType="int" resultType="ProductsRegisterDTO">
+        SELECT *
+        FROM PRODUCTS
+        WHERE product_no = #{productNo}
+    </select>
+
+    <select id="findByProduct" parameterType="int" resultType="CartsDTO">
+        SELECT COUNT(*) as count, product_no , product_quantity
+        FROM PRODUCTS
+        WHERE product_no = #{productNo}
+    </select>
+
+
+</mapper>
