@@ -5,39 +5,25 @@
 <mapper namespace="com.outliercart.restfulservice.repository.ProductsDao">
 
     <sql id="searchSql">
-        <choose>
-            <when test="searchType == null or searchType == ''">
-                <choose>
-                    <when test="searchContent != null and searchContent != ''">
-                        WHERE CONCAT(product_name, product_price, product_content) LIKE CONCAT('%', #{searchContent}, '%')
-                    </when>
-                    <otherwise>
-                        <!-- searchContent가 null 또는 빈 문자열인 경우 모든 열에서 검색 -->
-                        WHERE CONCAT(product_name, product_price, product_content) LIKE '%%'
-                    </otherwise>
-                </choose>
-            </when>
-            <otherwise>
-                <choose>
-                    <when test="searchType == 1">
-                        <!-- product_name 검색 조건 -->
-                        WHERE product_name LIKE CONCAT('%', #{searchContent}, '%')
-                    </when>
-                    <when test="searchType == 2">
-                        <!-- product_price 검색 조건 -->
-                        WHERE product_price LIKE CONCAT('%', #{searchContent}, '%')
-                    </when>
-                    <when test="searchType == 3">
-                        <!-- product_content 검색 조건 -->
-                        WHERE product_content LIKE CONCAT('%', #{searchContent}, '%')
-                    </when>
-                    <otherwise>
-                        <!-- searchType이 1, 2, 3이 아닌 경우 -->
-                        WHERE CONCAT(product_name , product_price , product_content) LIKE CONCAT('%', #{searchContent}, '%')
-                    </otherwise>
-                </choose>
-            </otherwise>
-        </choose>
+        <if test="searchType != null and searchType != '' and searchContent != null and searchContent != ''">
+            <if test="searchType == 'productName'">
+                <!-- product_name 검색 조건 -->
+                WHERE product_name LIKE CONCAT('%', #{searchContent}, '%')
+            </if>
+            <if test="searchType == 'productPrice'">
+                <!-- product_price 검색 조건 -->
+                WHERE product_price LIKE CONCAT('%', #{searchContent}, '%')
+            </if>
+            <if test="searchType == 'productContent'">
+                <!-- product_content 검색 조건 -->
+                WHERE product_content LIKE CONCAT('%', #{searchContent}, '%')
+            </if>
+        </if>
+        <if test="searchType == null or searchType == ''">
+            <if test="searchContent != null">
+                WHERE CONCAT(product_name, product_price, product_content) LIKE CONCAT('%', #{searchContent}, '%')
+            </if>
+        </if>
     </sql>
 
     <insert id="save" parameterType="ProductsRegisterDTO" useGeneratedKeys="true" keyProperty="productNo">
@@ -71,6 +57,5 @@
         FROM PRODUCTS
         WHERE product_no = #{productNo}
     </select>
-
 
 </mapper>
