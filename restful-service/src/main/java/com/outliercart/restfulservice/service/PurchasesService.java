@@ -8,14 +8,11 @@ import com.outliercart.restfulservice.exception.ProductQuantityException;
 import com.outliercart.restfulservice.repository.PurchasesDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,41 +26,34 @@ public class PurchasesService {
     @Transactional
     public PurchasesItemsDTO purchaseItems(PurchasesItemsDTO purchasesItemsDTO) {
 
-        PurchasesItemsDTO itemsDTO = purchasesDao.findByCartItems(purchasesItemsDTO);
+        purchasesItemsDTO = purchasesDao.findByCartItems(purchasesItemsDTO);
 
-        if (itemsDTO == null)
+        if (purchasesItemsDTO == null)
             throw new ProductNotFoundException("장바구니에 해당 상품이 존재하지 않습니다.");
 
-        if (itemsDTO.getProductQuantity() < itemsDTO.getCartQuantity()||
-            itemsDTO.getProductQuantity() <= 0)
-            throw new ProductQuantityException("현재 수량: "+itemsDTO.getProductQuantity()+"개, 수량 부족으로 주문할 수 없습니다.");
+        if (purchasesItemsDTO.getProductQuantity() < purchasesItemsDTO.getCartQuantity()||
+                purchasesItemsDTO.getProductQuantity() <= 0)
+            throw new ProductQuantityException("현재 수량: "+purchasesItemsDTO.getProductQuantity()+"개, 수량 부족으로 주문할 수 없습니다.");
 
         //insert
-        itemsDTO.setPurchaseDate(LocalDateTime.now());
-        purchasesDao.savePurchaseItems(itemsDTO);
+        purchasesItemsDTO.setPurchaseDate(LocalDateTime.now());
+        purchasesDao.savePurchaseItems(purchasesItemsDTO);
 
         //update
-        purchasesDao.updateProductQuantity(itemsDTO);
+        purchasesDao.updateProductQuantity(purchasesItemsDTO);
 
         //update
-        purchasesDao.updateCartsStatus(itemsDTO);
+        purchasesDao.updateCartsStatus(purchasesItemsDTO);
 
-        return itemsDTO;
+        return purchasesItemsDTO;
     }
 
     public int allPurchasesCount(Long userNo) {
         return purchasesDao.allPurchasesCount(userNo);
     }
 
-    public Map<String,Object> allPurchasesPosts(PageInfo pageInfo, Long userNo) {
-        Map<String,Object> map = new LinkedHashMap<>();
-        map.put("currentPage",pageInfo.getPage());
-        map.put("prevPage",pageInfo.getPrevPage());
-        map.put("nextPage",pageInfo.getNextPage());
-        map.put("startPage",pageInfo.getStartPage());
-        map.put("endPage",pageInfo.getEndPage());
-        map.put("allPurchasesPosts",purchasesDao.allPurchasesPosts(pageInfo,userNo));
-        return map;
+    public List<PurchasesListDTO> allPurchasesList(PageInfo pageInfo, Long userNo){
+        return purchasesDao.allPurchasesList(pageInfo, userNo);
     }
 
     public PurchasesListDTO singlePurchasesPosts(int purchasesItemsNo, Long userNo) {
