@@ -36,8 +36,7 @@ public interface PurchasesDao {
 
     int allPurchasesCount(Long userNo);
 
-    List<PurchasesListDTO> allPurchasesPosts(@Param("pageInfo") PageInfo pageInfo, @Param("userNo") Long userNo);
-
+    List<PurchasesListDTO> allPurchasesList(@Param("pageInfo") PageInfo pageInfo, @Param("userNo") Long userNo);
 
     PurchasesListDTO singlePurchasesPosts(@Param("params") Map<String, Object> params);
 }
