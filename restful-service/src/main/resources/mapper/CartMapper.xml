@@ -44,18 +44,25 @@
     <select id="findByCartItem" parameterType="Map" resultType="CartsDTO">
         SELECT *
         FROM CARTS c
-        WHERE user_no = #{params.userNo} AND cart_no = #{params.cartNo}
+        WHERE user_no = #{params.userNo}
+        AND cart_no = #{params.cartNo}
+        AND cart_delete_status = 'Y'
     </select>
 
-    <delete id="deleteSingleCart" parameterType="Map">
-        DELETE FROM CARTS
-        WHERE cart_no = #{params.cartNo} AND user_no = #{params.userNo}
-    </delete>
+    <update id="updateCartItemStatus" parameterType="Map">
+        UPDATE CARTS
+        SET cart_delete_status = 'N'
+        WHERE cart_no = #{params.cartNo}
+        AND user_no = #{params.userNo}
+        AND cart_delete_status = 'Y'
+    </update>
 
-    <delete id="deleteAllCart" parameterType="long">
-        DELETE FROM CARTS
+    <update id="updateAllCartItemStatus" parameterType="long">
+        UPDATE CARTS
+        SET cart_delete_status = 'N'
         WHERE user_no = #{userNo}
-    </delete>
+        AND cart_delete_status = 'Y'
+    </update>
 
     <select id="singleCartsPosts" parameterType="Map" resultType="CartItemsDTO">
         SELECT  ROW_NUMBER() OVER (ORDER BY c.cart_no DESC) AS cartNum,
