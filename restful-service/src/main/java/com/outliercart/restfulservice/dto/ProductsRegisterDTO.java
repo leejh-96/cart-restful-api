@@ -1,5 +1,6 @@
 package com.outliercart.restfulservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
