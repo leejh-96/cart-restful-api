@@ -16,9 +16,9 @@ public interface CartsDao {
 
     void saveCart(CartsDTO cartsDTO);
 
-    void deleteSingleCart(@Param("params") Map<String, Object> params);
+    void updateCartItemStatus(@Param("params") Map<String, Object> params);
 
-    void deleteAllCart(Long userNo);
+    void updateAllCartItemStatus(Long userNo);
 
     int allCartsCount(Long userNo);
 
