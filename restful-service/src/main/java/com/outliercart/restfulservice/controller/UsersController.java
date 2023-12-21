@@ -1,18 +1,21 @@
 package com.outliercart.restfulservice.controller;
 
+import com.outliercart.restfulservice.dto.ResponseDTO;
 import com.outliercart.restfulservice.dto.LoginDTO;
 import com.outliercart.restfulservice.dto.UsersRegisterDTO;
 import com.outliercart.restfulservice.service.LoginService;
 import com.outliercart.restfulservice.service.UsersRegisterService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class UsersController {
@@ -27,44 +30,58 @@ public class UsersController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<UsersRegisterDTO> createUser(@Validated @RequestBody UsersRegisterDTO usersRegisterDTO){
+    public ResponseEntity<EntityModel<ResponseDTO>> createUser(@Validated @RequestBody UsersRegisterDTO usersRegisterDTO){
 
-        usersRegisterService.save(usersRegisterDTO);
+        UsersRegisterDTO users = usersRegisterService.save(usersRegisterDTO);
 
-//        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-//                                            .path("/login")
-//                                            .buildAndExpand()
-//                                            .toUri();
+        EntityModel<ResponseDTO> entityModel = EntityModel.of(new ResponseDTO("UserNo : "+users.getUserNo()));
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                                            .path("/login")
-                                            .build()
-                                            .toUri();
-//        URI uri = ServletUriComponentsBuilder.fromPath("/login").build().toUri();
+        Link allProductsListLink = linkTo(methodOn(ProductsController.class).allProducts(null)).withRel("All-Products-List");
+        Link loginLink = linkTo(methodOn(this.getClass()).login(null, null)).withRel("Log-in");
 
-        return ResponseEntity.created(uri).build();
+        entityModel.add(allProductsListLink);
+        entityModel.add(loginLink);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
     }
 
     @PostMapping("/users/login")
-    public ResponseEntity<LoginDTO> login(@Validated @RequestBody LoginDTO loginDTO, HttpSession session){
+    public ResponseEntity<EntityModel<ResponseDTO>> login(@Validated @RequestBody LoginDTO loginDTO, HttpSession session){
 
         loginService.login(loginDTO,session);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        EntityModel<ResponseDTO> entityModel = EntityModel.of(new ResponseDTO("Login : Success"));
+
+        Link logoutLink = linkTo(methodOn(this.getClass()).logout(null)).withRel("Log-out");
+        Link createProductsLink = linkTo(methodOn(ProductsController.class).createProducts(null, null)).withRel("Create-Products");
+        Link allProductsLink = linkTo(methodOn(ProductsController.class).allProducts(null)).withRel("All-Products-List");
+
+        entityModel.add(logoutLink);
+        entityModel.add(createProductsLink);
+        entityModel.add(allProductsLink);
+
+        return ResponseEntity.status(HttpStatus.OK).body(entityModel);
     }
 
     @PostMapping("/users/logout")
-    public ResponseEntity logout(HttpServletRequest request){
+    public ResponseEntity<EntityModel<ResponseDTO>> logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);
 
         if (session != null){
             session.invalidate();
         }
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        EntityModel<ResponseDTO> entityModel = EntityModel.of(new ResponseDTO("Logout : Success"));
+
+        Link createUsersLink = linkTo(methodOn(this.getClass()).createUser(null)).withRel("Create-Users");
+        Link allProductsListLink = linkTo(methodOn(ProductsController.class).allProducts(null)).withRel("All-Products-List");
+        Link loginLink = linkTo(methodOn(this.getClass()).login(null,null)).withRel("Log-in");
+
+        entityModel.add(loginLink);
+        entityModel.add(createUsersLink);
+        entityModel.add(allProductsListLink);
+
+        return ResponseEntity.status(HttpStatus.OK).body(entityModel);
     }
-
-
-
 
 }
