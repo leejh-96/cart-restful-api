@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -42,21 +42,11 @@ public class CartsService {
     }
 
     public int allCartsCount(Long userNo) {
-        int cartsCount = cartsDao.allCartsCount(userNo);
-        if (cartsCount == 0)
-            throw new ProductNotFoundException("장바구니가 비어있습니다.");
-        return cartsCount;
+        return cartsDao.allCartsCount(userNo);
     }
 
-    public Map<String,Object> allCartsItems(PageInfo pageInfo, Long userNo) {
-        Map<String,Object> map = new LinkedHashMap<>();
-        map.put("currentPage",pageInfo.getPage());
-        map.put("prevPage",pageInfo.getPrevPage());
-        map.put("nextPage",pageInfo.getNextPage());
-        map.put("startPage",pageInfo.getStartPage());
-        map.put("endPage",pageInfo.getEndPage());
-        map.put("allProductPosts",cartsDao.allCartsItems(pageInfo,userNo));
-        return map;
+    public List<CartItemsDTO> allCartsList(PageInfo pageInfo, Long userNo){
+        return cartsDao.allCartsItems(pageInfo, userNo);
     }
 
     private void productQuantityCheck(CartsDTO cartDTO, CartsDTO cartsDTO) {
@@ -70,7 +60,7 @@ public class CartsService {
             throw new ProductNotFoundException("존재하지 않는 상품 입니다.");
     }
 
-    public void deleteSingleCart(Long userNo, int cartNo) {
+    public void updateCartItemStatus(Long userNo, int cartNo) {
         Map<String, Object> params = createParams(userNo,cartNo);
         CartsDTO cartsDTO = cartsDao.findByCartItem(params);
 
@@ -78,7 +68,11 @@ public class CartsService {
         cartExistsCheck(cartsDTO);
 
         //선택한 장바구니 상품 삭제
-        cartsDao.deleteSingleCart(params);
+        cartsDao.updateCartItemStatus(params);
+    }
+
+    public void updateAllCartItemStatus(Long userNo) {
+        cartsDao.updateAllCartItemStatus(userNo);
     }
 
     public CartItemsDTO singleCartsPosts(int cartNo, Long userNo) {
@@ -94,10 +88,6 @@ public class CartsService {
         params.put("userNo",userNo);
         params.put("cartNo",cartNo);
         return params;
-    }
-
-    public void deleteAllCart(Long userNo) {
-        cartsDao.deleteAllCart(userNo);
     }
 
     private void cartExistsCheck(CartsDTO cartDTO){
