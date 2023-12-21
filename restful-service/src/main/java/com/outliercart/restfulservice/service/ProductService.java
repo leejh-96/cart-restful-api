@@ -5,11 +5,14 @@ import com.outliercart.restfulservice.dto.ProductsRegisterDTO;
 import com.outliercart.restfulservice.exception.PageNotFoundException;
 import com.outliercart.restfulservice.exception.ProductNotFoundException;
 import com.outliercart.restfulservice.repository.ProductsDao;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class ProductService {
 
@@ -28,15 +31,8 @@ public class ProductService {
         return productsDao.allProductsCount(pageInfo);
     }
 
-    public Map<String,Object> allProductsPosts(PageInfo pageInfo) {
-        Map<String,Object> map = new LinkedHashMap<>();
-        map.put("currentPage",pageInfo.getPage());
-        map.put("prevPage",pageInfo.getPrevPage());
-        map.put("nextPage",pageInfo.getNextPage());
-        map.put("startPage",pageInfo.getStartPage());
-        map.put("endPage",pageInfo.getEndPage());
-        map.put("allProductPosts",productsDao.allProductsPosts(pageInfo));
-        return map;
+    public List<ProductsRegisterDTO> allProductsList(PageInfo pageInfo){
+        return productsDao.allProductsPosts(pageInfo);
     }
 
     private void pageExistsCheck(PageInfo pageInfo) {
