@@ -1,10 +1,5 @@
 package com.outliercart.restfulservice.commons;
 
-import com.outliercart.restfulservice.exception.PageNotFoundException;
-import com.outliercart.restfulservice.exception.ProductNotFoundException;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PageInfo {
 
-    private Integer searchType;
+    private String searchType;
     private String searchContent;
 
     private int page;
@@ -28,31 +23,18 @@ public class PageInfo {
         if (getPage()==0){
             setPage(1);
         }
+        //조금 더 생각해보고 삭제하기
+        log.info("getEndPage : "+getEndPage());
         if (getPage() > getEndPage())
-            throw new PageNotFoundException("존재하지 않는 페이지 입니다.");
+            setPage(1);
+//            throw new PageNotFoundException("존재하지 않는 페이지 입니다.");
     }
 
-    public void pageExistsCheck() {
-        if (getPage() > getEndPage())
-            throw new PageNotFoundException("존재하지 않는 페이지 입니다.");
-    }
-
-    public void productPageSettings(){
+    public void prevPageSettings(){
         log.info("getpage: "+getPage());
         if (getPage()==0){
             setPage(1);
         }
-        if (getPage() > getEndPage())
-            throw new ProductNotFoundException("존재하지 않는 페이지 입니다.");
-    }
-
-    public void cartPageSettings(){
-        log.info("getpage: "+getPage());
-        if (getPage()==0){
-            setPage(1);
-        }
-        if (getPage() > getEndPage())
-            throw new ProductNotFoundException("존재하지 않는 페이지 입니다.");
     }
 
     public int getMaxPage(){
