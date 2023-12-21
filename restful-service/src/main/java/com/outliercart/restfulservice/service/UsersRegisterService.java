@@ -19,7 +19,7 @@ public class UsersRegisterService {
         this.usersRegisterDao = usersRegisterDao;
     }
 
-    public void save(UsersRegisterDTO usersRegisterDTO) {
+    public UsersRegisterDTO save(UsersRegisterDTO usersRegisterDTO) {
 
         //사용중인 ID 인지, 사용중인 EMAIL 인지 체크.
         duplicateIdCheck(usersRegisterDTO.getUserId());
@@ -31,6 +31,7 @@ public class UsersRegisterService {
 
         //DB 저장.
         usersRegisterDao.save(usersRegisterDTO);
+        return usersRegisterDTO;
     }
 
     private void duplicateIdCheck(String userId){
