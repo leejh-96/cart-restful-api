@@ -221,7 +221,7 @@ http://13.124.47.242:8084/carts/23?page=1
 
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
-| 장바구니 선택 삭제 | PATCH | http://13.124.47.242:8084/carts/1 |
+| 장바구니 선택 삭제 | PATCH | http://13.124.47.242:8084/carts/{cartNo} |
 
 **Parameters for Removing Selected from Cart**
 
