@@ -5,8 +5,6 @@
 - 아래의 링크를 통해서도 API 명세서를 보실 수 있습니다.
 - https://documenter.getpostman.com/view/28000436/2s9YkraKHx
 
----
-
 ## `Users`
 
 | 기능 | HTTP Method | API Path |
