@@ -5,9 +5,9 @@
 - 아래의 링크를 통해서도 API 명세서를 보실 수 있습니다.
 - https://documenter.getpostman.com/view/28000436/2s9YkraKHx
 
-## `Users`
-
 ---
+
+## `Users`
 
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
@@ -30,6 +30,8 @@
 
 ---
 
+## `Users`
+
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
 | 로그인 | POST | http://13.124.47.242:8084/users/login |
@@ -49,6 +51,8 @@
 
 ---
 
+## `Users`
+
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
 | 로그아웃 | POST | http://13.124.47.242:8084/users/logout |
@@ -63,7 +67,7 @@
 
 ---
 
-### `Products`
+## `Products`
 
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
@@ -90,6 +94,8 @@
 
 ---
 
+## `Products`
+
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
 | 쇼핑 목록 리스트 및 검색 | GET | http://13.124.47.242:8084/products |
@@ -113,6 +119,8 @@ http://13.124.47.242:8084/products?searchType=productName&searchContent=짜파&p
 - Products 목록 리스트와 검색을 완료하면 200(OK) HTTP Status Code 를 반환합니다.
 
 ---
+
+## `Products`
 
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
@@ -139,7 +147,7 @@ http://13.124.47.242:8084/products/1?searchType=productName&searchContent=짜파
 
 ---
 
-### `Carts`
+## `Carts`
 
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
@@ -162,6 +170,8 @@ http://13.124.47.242:8084/products/1?searchType=productName&searchContent=짜파
 
 ---
 
+## `Carts`
+
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
 | 장바구니 목록 리스트 | GET | http://13.124.47.242:8084/carts |
@@ -183,6 +193,8 @@ http://13.124.47.242:8084/carts?page=1
 - Carts 목록 리스트와 200(OK) HTTP Status Code 를 반환합니다.
 
 ---
+
+## `Carts`
 
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
@@ -207,6 +219,8 @@ http://13.124.47.242:8084/carts/23?page=1
 
 ---
 
+## `Carts`
+
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
 | 장바구니 선택 삭제 | PATCH | http://13.124.47.242:8084/carts/1 |
@@ -229,6 +243,8 @@ http://13.124.47.242:8084/carts/1
 
 ---
 
+## `Carts`
+
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
 | 장바구니 전체 삭제 | PATCH | http://13.124.47.242:8084/carts |
@@ -245,7 +261,7 @@ http://13.124.47.242:8084/carts
 
 ---
 
-### `Purchases`
+## `Purchases`
 
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
@@ -268,6 +284,8 @@ http://13.124.47.242:8084/carts
 
 ---
 
+## `Purchases`
+
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
 | 구매 목록 리스트 | GET | http://13.124.47.242:8084/purchases-items |
@@ -289,6 +307,8 @@ http://13.124.47.242:8084/purchases-items?page=1
 - Purchases Items 목록 리스트와 200(OK) HTTP Status Code 를 반환합니다.
 
 ---
+
+## `Purchases`
 
 | 기능 | HTTP Method | API Path |
 | --- | --- | --- |
