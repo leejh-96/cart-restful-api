@@ -1,10 +1,28 @@
 # Cart-RestAPI-Webserver
 - Docker와 AWS EC2를 사용해 배포는 완료했지만, 수정할 부분과 개선점은 계속해서 수정하도록 하겠습니다.
 - 아이디 : outlier1 , 비밀번호 : outlier1
+### 배포 및 인프라
+
+- `AWS EC2` `AWS RDS` `Docker`
+
+### 백엔드
+
+- `SpringBoot 3.1.6` `JAVA 17` `MyBatis 3.0.3`
+
+### 데이터베이스
+
+- `Mysql`
+
+### 빌드
+
+- `Gradle`
+
+### 테스트
+
+- `Postman`
 ## API 명세서
 - 아래의 링크를 통해서도 API 명세서를 보실 수 있습니다.
 - https://documenter.getpostman.com/view/28000436/2s9YkraKHx
----
 ## `Users`
 
 | 기능 | HTTP Method | API Path |
