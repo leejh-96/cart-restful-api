@@ -1,12 +1,14 @@
 package com.outliercart.restfulservice.controller;
 
 import com.outliercart.restfulservice.commons.PageInfo;
-import com.outliercart.restfulservice.dto.ProductsRegisterDTO;
+import com.outliercart.restfulservice.dto.ProductsDTO;
 import com.outliercart.restfulservice.dto.ResponseDTO;
+import com.outliercart.restfulservice.service.CreateLinkService;
 import com.outliercart.restfulservice.service.LoginService;
 import com.outliercart.restfulservice.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
@@ -26,110 +28,108 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class ProductsController {
 
+    private final CreateLinkService createLinkService;
+
     private final LoginService loginService;
 
     private final ProductService productService;
 
-    public ProductsController(LoginService loginService, ProductService productService) {
+    public ProductsController(CreateLinkService createLinkService, LoginService loginService, ProductService productService) {
+        this.createLinkService = createLinkService;
         this.loginService = loginService;
         this.productService = productService;
     }
 
     @PostMapping("/products")
-    public ResponseEntity<EntityModel<ResponseDTO>> createProducts(@Validated @RequestBody ProductsRegisterDTO productsRegisterDTO,
+    public ResponseEntity<EntityModel<ResponseDTO>> createProducts(@Validated @RequestBody ProductsDTO productsDTO,
                                                               HttpSession session){
 
         loginService.userLoginCheck(session);
-        ProductsRegisterDTO productDTO = productService.save(productsRegisterDTO);
 
+        ProductsDTO productDTO = productService.createdProducts(productsDTO);
+
+        // 생성된 Product 리소스 번호를 반환
         EntityModel<ResponseDTO> entityModel = EntityModel.of(new ResponseDTO("ProductNo : "+productDTO.getProductNo()));
 
+        // 상품 목록 리스트 및 검색 링크 생성
         Link allProductsListLink = linkTo(methodOn(this.getClass()).allProducts(null)).withRel("All-Products-List");
-        Link selectedProductsLink = linkTo(methodOn(this.getClass()).singleProducts(productDTO.getProductNo(), null)).withRel("Selected-Products");
+        // 상품 상세 보기 링크 생성
+        Link selectedProductsLink = linkTo(methodOn(this.getClass()).selectedProducts(productDTO.getProductNo(), null)).withRel("Selected-Products");
 
         entityModel.add(allProductsListLink);
         entityModel.add(selectedProductsLink);
 
+        // 201 CREATED HTTP Status Code 와 HTTP Body 생성된 상품 번호와 링크를 담아서 반환
         return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
     }
 
     @GetMapping("/products")
-    public ResponseEntity<EntityModel<ResponseDTO>> allProducts(@ModelAttribute PageInfo pageInfo){
+    public ResponseEntity<CollectionModel<ProductsDTO>> allProducts(@ModelAttribute PageInfo pageInfo){
 
         pageInfo.setCount(productService.allProductsCount(pageInfo));
         pageInfo.pageSettings();
 
-        List<ProductsRegisterDTO> productsList = productService.allProductsList(pageInfo);
-        EntityModel<ResponseDTO> entityModel = EntityModel.of(new ResponseDTO("Products Search Result"));
+        List<ProductsDTO> productsList = productService.allProductsList(pageInfo);
 
-        UriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentRequest()
-                .replaceQueryParam("searchType", pageInfo.getSearchType())
-                .replaceQueryParam("searchContent", pageInfo.getSearchContent())
-                .replaceQueryParam("page", pageInfo.getStartPage());
-
-        Link startPageLink = Link.of(builder.toUriString(), "Start-Page");
-
-        builder.replaceQueryParam("page", pageInfo.getPrevPage());
-        Link prevPageLink = Link.of(builder.toUriString(), "Prev-Page");
-
-        builder.replaceQueryParam("page", pageInfo.getPage());
-        Link currentPageLink = Link.of(builder.toUriString(), "Current-Page");
-
-        builder.replaceQueryParam("page", pageInfo.getNextPage());
-        Link nextPageLink = Link.of(builder.toUriString(), "Next-Page");
-
-        builder.replaceQueryParam("page", pageInfo.getEndPage());
-        Link endPageLink = Link.of(builder.toUriString(), "End-Page");
-
-        for (ProductsRegisterDTO dto : productsList){
-            UriComponents uriComponents = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{productNo}")
-                    .replaceQueryParam("searchType", pageInfo.getSearchType())
-                    .replaceQueryParam("searchContent", pageInfo.getSearchContent())
-                    .replaceQueryParam("page", pageInfo.getPage())
-                    .buildAndExpand(dto.getProductNo());
-
-            Link productLink = Link.of(uriComponents.toUriString(), "Selected-Products");
-            entityModel.add(productLink);
+        // 상품 상세 보기 링크를 생성해 ProductDTO 객체에 추가
+        for (ProductsDTO dto : productsList){
+            UriComponents selectedProductUri = ServletUriComponentsBuilder.fromCurrentRequest()
+                                                                        .path("/{productNo}")
+                                                                        .replaceQueryParam("searchType", pageInfo.getSearchType())
+                                                                        .replaceQueryParam("searchContent", pageInfo.getSearchContent())
+                                                                        .replaceQueryParam("page", pageInfo.getPage())
+                                                                        .buildAndExpand(dto.getProductNo());
+            // 상품 상세 보기 링크 생성 후 DTO에 담기
+            dto.add(Link.of(selectedProductUri.toUriString()).withRel("Selected-Products"));
         }
 
+        CollectionModel<ProductsDTO> collectionModel = CollectionModel.of(productsList);
+
+        // 상품 목록 페이징 처리를 위한 쿼리 파라미터 세팅(CreateLinkService의 createPaginationLinks 메서드를 호출해 링크 생성)
+        List<Link> paginationLinks = createLinkService.createPaginationLinks(this.getClass(), pageInfo);
+        // 상품 목록 추가 링크 생성
         Link createProductsLink = linkTo(methodOn(this.getClass()).createProducts(null, null)).withRel("Create-Products");
+        // 장바구니 목록 리스트 링크 생성
         Link allCartsListLink = linkTo(methodOn(CartsController.class).allCarts(null, null)).withRel("All-Carts-List");
+        // 구매 목록 리스트 링크 생성
         Link allPurchaseListLink = linkTo(methodOn(PurchasesController.class).allPurchasesItems(null, null)).withRel("All-Purchase-List");
 
-        entityModel.add(startPageLink);
-        entityModel.add(prevPageLink);
-        entityModel.add(currentPageLink);
-        entityModel.add(nextPageLink);
-        entityModel.add(endPageLink);
-        entityModel.add(createProductsLink);
-        entityModel.add(allCartsListLink);
-        entityModel.add(allPurchaseListLink);
+        for (Link link : paginationLinks){
+            // 생성된 페이징 링크를 collectionModel에 순서대로 추가
+            collectionModel.add(link);
+        }
+        collectionModel.add(createProductsLink);
+        collectionModel.add(allCartsListLink);
+        collectionModel.add(allPurchaseListLink);
 
-        return ResponseEntity.status(HttpStatus.OK).body(entityModel);
+        // 200 OK HTTP Status Code 와 HTTP Body 상품 목록 검색 리스트와 링크를 담아서 반환
+        return ResponseEntity.status(HttpStatus.OK).body(collectionModel);
     }
 
     @GetMapping("/products/{productNo}")
-    public ResponseEntity<EntityModel<ProductsRegisterDTO>> singleProducts(@PathVariable int productNo, @ModelAttribute PageInfo pageInfo){
+    public ResponseEntity<EntityModel<ProductsDTO>> selectedProducts(@PathVariable int productNo, @ModelAttribute PageInfo pageInfo){
 
         pageInfo.prevPageSettings();
-        ProductsRegisterDTO selectedProduct = productService.singleProductsPosts(productNo);
+        ProductsDTO selectedProduct = productService.selectedProducts(productNo);
 
-        EntityModel<ProductsRegisterDTO> entityModel = EntityModel.of(selectedProduct);
+        EntityModel<ProductsDTO> entityModel = EntityModel.of(selectedProduct);
 
-        UriComponentsBuilder productsList = ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("/products")
-                .replaceQueryParam("searchType", pageInfo.getSearchType())
-                .replaceQueryParam("searchContent", pageInfo.getSearchContent())
-                .replaceQueryParam("page", pageInfo.getPage());
+        // 이전으로 돌아가기 위한 이전 페이지 정보 쿼리 파라미터 세팅
+        UriComponentsBuilder productsList = ServletUriComponentsBuilder.fromCurrentContextPath()
+                                                                    .path("/products")
+                                                                    .replaceQueryParam("searchType", pageInfo.getSearchType())
+                                                                    .replaceQueryParam("searchContent", pageInfo.getSearchContent())
+                                                                    .replaceQueryParam("page", pageInfo.getPage());
 
+        // 이전 페이지 정보 링크 생성
         Link prevProductListLink = Link.of(productsList.toUriString(), "Prev-By-Product-List");
+        // 장바구니 담기 링크 생성
         Link createCartLink = linkTo(methodOn(CartsController.class).createCarts(null, null)).withRel("Create-Carts");
 
         entityModel.add(prevProductListLink);
         entityModel.add(createCartLink);
 
+        // 200 OK HTTP Status Code 와 HTTP Body 상품 상세 정보와 링크를 담아서 반환
         return ResponseEntity.status(HttpStatus.OK).body(entityModel);
     }
 
