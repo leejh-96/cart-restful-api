@@ -8,11 +8,11 @@ import java.util.Date;
 @Getter@Setter
 public class ExceptionResponse {
 
-    private Date timestamp;
+    private Date timestamp; // 예외 발생 시간
 
-    private String message;
+    private String message; // 예외 메세지
 
-    private String currentRequestPath;
+    private String currentRequestPath; // 예외가 발생한 요청 경로
 
     public ExceptionResponse() {
     }
