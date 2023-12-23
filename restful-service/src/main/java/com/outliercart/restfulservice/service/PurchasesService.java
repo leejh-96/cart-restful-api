@@ -1,8 +1,8 @@
 package com.outliercart.restfulservice.service;
 
 import com.outliercart.restfulservice.commons.PageInfo;
-import com.outliercart.restfulservice.dto.PurchasesItemsDTO;
-import com.outliercart.restfulservice.dto.PurchasesListDTO;
+import com.outliercart.restfulservice.dto.PurchaseItemDTO;
+import com.outliercart.restfulservice.dto.PurchasesDTO;
 import com.outliercart.restfulservice.exception.ProductNotFoundException;
 import com.outliercart.restfulservice.exception.ProductQuantityException;
 import com.outliercart.restfulservice.repository.PurchasesDao;
@@ -24,44 +24,46 @@ public class PurchasesService {
     private final PurchasesDao purchasesDao;
 
     @Transactional
-    public PurchasesItemsDTO purchaseItems(PurchasesItemsDTO purchasesItemsDTO) {
+    public PurchaseItemDTO createdPurchases(PurchaseItemDTO purchaseItemDTO) {
 
-        purchasesItemsDTO = purchasesDao.findByCartItems(purchasesItemsDTO);
+        purchaseItemDTO = purchasesDao.findByCartItems(purchaseItemDTO);
 
-        if (purchasesItemsDTO == null)
+        if (purchaseItemDTO == null)
             throw new ProductNotFoundException("장바구니에 해당 상품이 존재하지 않습니다.");
 
-        if (purchasesItemsDTO.getProductQuantity() < purchasesItemsDTO.getCartQuantity()||
-                purchasesItemsDTO.getProductQuantity() <= 0)
-            throw new ProductQuantityException("현재 수량: "+purchasesItemsDTO.getProductQuantity()+"개, 수량 부족으로 주문할 수 없습니다.");
+        if (purchaseItemDTO.getProductQuantity() < purchaseItemDTO.getCartQuantity() || purchaseItemDTO.getProductQuantity() <= 0)
+            throw new ProductQuantityException("현재 수량: "+ purchaseItemDTO.getProductQuantity()+"개, 수량 부족으로 주문할 수 없습니다.");
 
         //insert
-        purchasesItemsDTO.setPurchaseDate(LocalDateTime.now());
-        purchasesDao.savePurchaseItems(purchasesItemsDTO);
+        purchaseItemDTO.setPurchaseDate(LocalDateTime.now());
+        purchasesDao.createdPurchases(purchaseItemDTO);
 
         //update
-        purchasesDao.updateProductQuantity(purchasesItemsDTO);
+        purchasesDao.updateProductQuantity(purchaseItemDTO);
 
         //update
-        purchasesDao.updateCartsStatus(purchasesItemsDTO);
+        purchasesDao.updateCartsStatus(purchaseItemDTO);
 
-        return purchasesItemsDTO;
+        return purchaseItemDTO;
     }
 
     public int allPurchasesCount(Long userNo) {
         return purchasesDao.allPurchasesCount(userNo);
     }
 
-    public List<PurchasesListDTO> allPurchasesList(PageInfo pageInfo, Long userNo){
+    public List<PurchasesDTO> allPurchasesList(PageInfo pageInfo, Long userNo){
         return purchasesDao.allPurchasesList(pageInfo, userNo);
     }
 
-    public PurchasesListDTO singlePurchasesPosts(int purchasesItemsNo, Long userNo) {
+    public PurchasesDTO selectedPurchases(int purchasesItemsNo, Long userNo) {
+
         Map<String, Object> params = createParams(userNo, purchasesItemsNo);
-        PurchasesListDTO purchasesListDTO = purchasesDao.singlePurchasesPosts(params);
-        if (purchasesListDTO == null)
+        PurchasesDTO purchasesDTO = purchasesDao.selectedPurchases(params);
+
+        if (purchasesDTO == null)
             throw new ProductNotFoundException("구매 상품이 존재하지 않습니다.");
-        return purchasesListDTO;
+
+        return purchasesDTO;
     }
 
     private Map<String, Object> createParams(Long userNo, int purchasesItemsNo) {
