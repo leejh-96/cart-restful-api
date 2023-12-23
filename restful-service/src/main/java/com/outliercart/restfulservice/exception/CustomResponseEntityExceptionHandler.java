@@ -26,33 +26,33 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     }
 
     @ExceptionHandler(UsersRegisterException.class)
-    public final ResponseEntity<Object> UsersRegisterExceptions(Exception exception, WebRequest webRequest){
+    public final ResponseEntity<Object> usersRegisterExceptions(Exception exception, WebRequest webRequest){
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),exception.getMessage(), webRequest.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public final ResponseEntity<Object> UserNotFoundExceptions(Exception exception, WebRequest webRequest){
+    public final ResponseEntity<Object> userNotFoundExceptions(Exception exception, WebRequest webRequest){
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),exception.getMessage(), webRequest.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public final ResponseEntity<Object> PostNotFoundExceptions(Exception exception, WebRequest webRequest){
+    public final ResponseEntity<Object> productNotFoundExceptions(Exception exception, WebRequest webRequest){
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),exception.getMessage(), webRequest.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(PageNotFoundException.class)
-    public final ResponseEntity<Object> PageNotFoundExceptions(Exception exception, WebRequest webRequest){
+    public final ResponseEntity<Object> pageNotFoundExceptions(Exception exception, WebRequest webRequest){
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),exception.getMessage(), webRequest.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ProductQuantityException.class)
-    public final ResponseEntity<Object> ProductQuantityExceptions(Exception exception, WebRequest webRequest){
+    public final ResponseEntity<Object> productQuantityExceptions(Exception exception, WebRequest webRequest){
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),exception.getMessage(), webRequest.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
     @Override
@@ -60,10 +60,11 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         BindingResult bindingResult = ex.getBindingResult();
         StringBuilder errors = new StringBuilder();
 
+        // 각 유효성 검사 에러를 문자열로 결합
         for (FieldError error : bindingResult.getFieldErrors()) {
             String fieldName = error.getField();
             String errorMessage = error.getDefaultMessage();
-            errors.append(fieldName).append(": ").append(errorMessage).append(", "); // 각 에러를 문자열로 결합
+            errors.append(fieldName).append(": ").append(errorMessage).append(", ");
         }
 
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), errors.toString(), webRequest.getDescription(false));
