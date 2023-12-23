@@ -19,6 +19,106 @@
 ### 테스트
 
 - `Postman`
+
+# 주요 구현 내용
+### 배포 절차
+
+1. **로컬에서 Docker 파일 및 프로젝트 JAR 파일을 EC2로 복사**: Docker 파일과 애플리케이션의 실행에 필요한 JAR 파일을 EC2 인스턴스로 전송하여 배포용 환경을 마련했습니다.
+2. **EC2에서 Docker 설치**: EC2 인스턴스에 Docker를 설치하여 도커 엔진을 사용할 수 있도록 했습니다.
+3. **Docker 이미지 빌드**: Docker 파일을 기반으로 도커 이미지를 빌드하여 애플리케이션을 실행할 수 있는 이미지를 생성했습니다.
+4. **Docker 컨테이너 생성 및 실행**: 도커 컨테이너를 생성하고, 해당 컨테이너에서 생성한 이미지를 -d 옵션을 통해 백그라운드에서 실행시켰습니다.
+---
+### 예외 처리
+
+사용자 정의 예외, 유효성 검사 등 다양한 예외를 통합하여 다루기 위해 `CustomResponseEntityExceptionHandler` 클래스로 정의해 처리했습니다.
+
+| 메서드명 | 역할 | 상태 코드 |
+| --- | --- | --- |
+| allExceptions | 사용자 정의 예외 클래스 이외의 예외를 처리합니다. | 500(INTERNAL SERVER ERROR) 상태 코드를 반환합니다. |
+| usersRegisterExceptions | 회원가입 ID,EMAIL에 대해 이미 존재하는 리소스를 합니다. | 409(CONFLICT) 상태 코드를 반환합니다. |
+| userNotFoundExceptions | 찾을 수 없는 회원을 처리합니다. | 404(NOT FOUND) 상태 코드를 반환합니다. |
+| productNotFoundExceptions | 찾을 수 없는 상품을 처리합니다. | 404(NOT FOUND) 상태 코드를 반환합니다. |
+| pageNotFoundExceptions | 찾을 수 없는 페이지를 처리합니다. | 404(NOT FOUND) 상태 코드를 반환합니다. |
+| productQuantityExceptions | 상품 수량이 부족할 때 처리합니다. | 404(NOT FOUND) 상태 코드를 반환합니다. |
+| handleMethodArgumentNotValid | 사용자의 입력 데이터에 대한 유효성 검증 후 에러를 처리합니다. | 400(BAD REQUEST) 상태 코드를 반환합니다. |
+
+---
+### HATEOAS
+
+현재 리소스와 연관된 호출 가능한 정보를 제공하기 위해 데이터와 URL을 함께 담아 반환하도록 구현했습니다.
+
+- 응답 예시
+
+```json
+{
+    "productNum": 0,
+    "productNo": 1,
+    "productName": "짜파게티",
+    "productPrice": 1500,
+    "productQuantity": 780,
+    "productContent": "몸에 좋고 맛도 좋은 짜파게티",
+    "_links": {
+        "Prev-By-Product-List": {
+            "href": "http://13.124.47.242:8084/products?searchType=productName&searchContent=%EC%A7%9C%ED%8C%8C&page=1"
+        },
+        "Create-Carts": {
+            "href": "http://13.124.47.242:8084/carts"
+        }
+    }
+}
+```
+---
+### 쿼리 파라미터 설정
+
+상품 목록, 장바구니 목록, 구매 목록 요청시 쿼리 파라미터에 따른 페이징 처리된 URL을 함께 담아 반환하기 위해서 `CreateLinkService` 클래스를 정의했습니다.
+
+- `createPaginationLinks` 메서드 내부에선 현재 컨트롤러가 `ProductsController`와 일치하는지 확인하는 조건문을 통해 각 컨트롤러에 맞게 쿼리 파라미터를 설정합니다.
+
+```java
+
+public List<Link> createPaginationLinks(Class<?> controllerClass, PageInfo pageInfo) {
+//생략..
+		UriComponentsBuilder builder = null;
+
+				if (controllerClass.getName().equals(ProductsController.class.getName())){
+				    // 상품 목록 페이징 처리를 위한 쿼리 파라미터 세팅
+				    builder = ServletUriComponentsBuilder.fromCurrentRequest()
+				                                        .replaceQueryParam("searchType", pageInfo.getSearchType())
+				                                        .replaceQueryParam("searchContent", pageInfo.getSearchContent())
+				                                        .replaceQueryParam("page", pageInfo.getStartPage());
+				}else {
+				    // 장바구니 목록 페이징, 구매 목록 페이징 처리를 위한 쿼리 파라미터 세팅
+				    builder = ServletUriComponentsBuilder.fromCurrentRequest()
+				                                        .replaceQueryParam("page", pageInfo.getStartPage());
+				}
+
+//생략..
+}
+```
+---
+### 비밀번호 암호화
+
+사용자의 비밀번호를 암호화 하기 위해서 `Jasypt` 라이브러리를 활용하여 `EncryptPasswordService` 클래스를 정의했습니다.
+
+- `encryptPassword` 메서드는 사용자가 제공한 비밀번호를 암호화하기 위해 `BasicPasswordEncryptor` 객체를 활용합니다. 
+이 과정에서 사용자가 입력한 비밀번호는 암호화되고, 이 암호화된 값이 데이터베이스에 저장됩니다.
+- `checkPassword` 메서드는 로그인 프로세스에서 사용자가 입력한 비밀번호와 데이터베이스에 저장된 비밀번호를 비교하는데 활용됩니다. 
+이를 위해 `BasicPasswordEncryptor` 객체의 `checkPassword` 메서드가 사용되며, 이 메서드는 입력된 비밀번호와 저장된 비밀번호가 일치하는지를 검증합니다.
+---
+### 세션 활용
+
+해당 서버는 로그인에서 세션을 활용하여 사용자의 생성 번호를 저장했습니다. 
+또한, 세션에 저장된 사용자 생성 번호의 유무에 따라 다음과 같은 접근 권한을 가지도록 설계했습니다.
+
+- **비로그인 상태**: 회원가입, 로그인, 상품 목록 리스트 및 검색에 접근할 수 있습니다. 이 상태에서는 로그인이 필요하지 않으며, 제한된 서비스를 사용할 수 있습니다.
+- **로그인 상태**: 로그인 후에는 모든 경로에 자유롭게 접근할 수 있습니다. 로그인한 사용자는 모든 서비스와 기능에 접근할 권한을 가지게 됩니다.
+---
+### 유효성 검사
+
+Spring Validation을 활용해 사용자의 입력 데이터의 유효성 검사를 수행하고 검사 결과를 처리했습니다.
+
+- 적용된 기능 : 회원가입, 로그인, 쇼핑 목록 상품 추가, 장바구니 담기
+---
 # API 명세서
 - 아래의 링크를 통해서도 API 명세서를 보실 수 있습니다.
 - https://documenter.getpostman.com/view/28000436/2s9YkraKHx
