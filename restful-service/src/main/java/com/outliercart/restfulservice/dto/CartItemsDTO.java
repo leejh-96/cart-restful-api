@@ -3,10 +3,11 @@ package com.outliercart.restfulservice.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.RepresentationModel;
 
 @ToString
 @Getter@Setter
-public class CartItemsDTO {
+public class CartItemsDTO extends RepresentationModel<CartItemsDTO> {
 
     private int cartNum;//장바구니 게시물 번호
 
