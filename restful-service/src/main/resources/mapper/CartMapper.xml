@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.outliercart.restfulservice.repository.CartsDao">
 
-    <insert id="saveCart" parameterType="CartsDTO" useGeneratedKeys="true" keyProperty="cartNo">
+    <insert id="createdCarts" parameterType="CartsDTO" useGeneratedKeys="true" keyProperty="cartNo">
         INSERT INTO CARTS
         (user_no, product_no, product_quantity, cart_delete_status)
         VALUES
@@ -64,7 +64,7 @@
         AND cart_delete_status = 'Y'
     </update>
 
-    <select id="singleCartsPosts" parameterType="Map" resultType="CartItemsDTO">
+    <select id="selectedCarts" parameterType="Map" resultType="CartItemsDTO">
         SELECT  ROW_NUMBER() OVER (ORDER BY c.cart_no DESC) AS cartNum,
                 c.cart_no ,
                 c.user_no ,
