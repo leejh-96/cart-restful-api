@@ -12,5 +12,5 @@ public interface UsersRegisterDao {
 
     int findByEmail(String userEmail);
 
-    void save(UsersRegisterDTO usersRegisterDTO);
+    void createdUsers(UsersRegisterDTO usersRegisterDTO);
 }
