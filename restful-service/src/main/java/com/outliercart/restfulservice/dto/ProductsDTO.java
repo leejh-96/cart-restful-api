@@ -1,19 +1,19 @@
 package com.outliercart.restfulservice.dto;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.hateoas.RepresentationModel;
 
 @ToString
 @Getter@Setter
-public class ProductsRegisterDTO {
-
-    private int productNo;
+public class ProductsDTO extends RepresentationModel<ProductsDTO> {
 
     private int productNum;
+
+    private int productNo;
 
     @NotBlank(message = "상품 이름은 필수입니다.")
     @Length(max = 33, message = "상품 이름은 최대 33자까지 허용됩니다.")
