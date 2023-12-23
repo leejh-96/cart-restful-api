@@ -78,19 +78,19 @@
 
 public List<Link> createPaginationLinks(Class<?> controllerClass, PageInfo pageInfo) {
 //생략..
-		UriComponentsBuilder builder = null;
+	UriComponentsBuilder builder = null;
 
-				if (controllerClass.getName().equals(ProductsController.class.getName())){
-				    // 상품 목록 페이징 처리를 위한 쿼리 파라미터 세팅
-				    builder = ServletUriComponentsBuilder.fromCurrentRequest()
-				                                        .replaceQueryParam("searchType", pageInfo.getSearchType())
-				                                        .replaceQueryParam("searchContent", pageInfo.getSearchContent())
-				                                        .replaceQueryParam("page", pageInfo.getStartPage());
-				}else {
-				    // 장바구니 목록 페이징, 구매 목록 페이징 처리를 위한 쿼리 파라미터 세팅
-				    builder = ServletUriComponentsBuilder.fromCurrentRequest()
-				                                        .replaceQueryParam("page", pageInfo.getStartPage());
-				}
+		if (controllerClass.getName().equals(ProductsController.class.getName())){
+		    // 상품 목록 페이징 처리를 위한 쿼리 파라미터 세팅
+		    builder = ServletUriComponentsBuilder.fromCurrentRequest()
+							.replaceQueryParam("searchType", pageInfo.getSearchType())
+							.replaceQueryParam("searchContent", pageInfo.getSearchContent())
+							.replaceQueryParam("page", pageInfo.getStartPage());
+		}else {
+		    // 장바구니 목록 페이징, 구매 목록 페이징 처리를 위한 쿼리 파라미터 세팅
+		    builder = ServletUriComponentsBuilder.fromCurrentRequest()
+							.replaceQueryParam("page", pageInfo.getStartPage());
+		}
 
 //생략..
 }
