@@ -1,6 +1,5 @@
 package com.outliercart.restfulservice.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

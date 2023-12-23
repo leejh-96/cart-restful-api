@@ -1,6 +1,5 @@
 package com.outliercart.restfulservice.dto;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,9 +20,5 @@ public class CartsDTO {
 
     @Min(value = 1, message = "상품 수량은 최소 1개 이상 입니다.")
     private Integer productQuantity;//상품 수량
-
-
-
-
 
 }
