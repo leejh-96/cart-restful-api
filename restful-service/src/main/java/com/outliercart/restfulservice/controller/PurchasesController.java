@@ -3,11 +3,12 @@ package com.outliercart.restfulservice.controller;
 import com.outliercart.restfulservice.commons.PageInfo;
 import com.outliercart.restfulservice.dto.*;
 import com.outliercart.restfulservice.exception.UserNotFoundException;
+import com.outliercart.restfulservice.service.CreateLinkService;
 import com.outliercart.restfulservice.service.LoginService;
 import com.outliercart.restfulservice.service.PurchasesService;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
@@ -25,26 +26,40 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
 public class PurchasesController {
+
+    private final CreateLinkService createLinkService;
 
     private final LoginService loginService;
 
     private final PurchasesService purchasesService;
 
+    public PurchasesController(CreateLinkService createLinkService, LoginService loginService, PurchasesService purchasesService) {
+        this.createLinkService = createLinkService;
+        this.loginService = loginService;
+        this.purchasesService = purchasesService;
+    }
+
     @PostMapping("/purchases-items")
-    public ResponseEntity<EntityModel<ResponseDTO>> purchaseItems(@RequestBody PurchasesItemsDTO purchasesItemsDTO, HttpSession session){
+    public ResponseEntity<EntityModel<ResponseDTO>> createdPurchases(@RequestBody PurchaseItemDTO purchaseItemDTO, HttpSession session){
 
         Long userNo = loginService.userLoginCheck(session);
-        if (!userNo.equals(purchasesItemsDTO.getUserNo()))
+
+        if (!userNo.equals(purchaseItemDTO.getUserNo()))
             throw new UserNotFoundException("일치하지 않은 사용자입니다.");
-        purchasesItemsDTO = purchasesService.purchaseItems(purchasesItemsDTO);
 
-        EntityModel<ResponseDTO> entityModel = EntityModel.of(new ResponseDTO("purchaseNo : "+purchasesItemsDTO.getPurchasesItemsNo()));
+        purchaseItemDTO = purchasesService.createdPurchases(purchaseItemDTO);
 
+        // 생성된 Purchase 리소스 번호를 반환
+        EntityModel<ResponseDTO> entityModel = EntityModel.of(new ResponseDTO("purchaseNo : "+ purchaseItemDTO.getPurchasesItemsNo()));
+
+        // 구매 목록 리스트 링크 생성
         Link allPurchasesListLink = linkTo(methodOn(this.getClass()).allPurchasesItems(null,null)).withRel("All-Purchases-List");
-        Link selectedPurchasesLink = linkTo(methodOn(this.getClass()).singlePurchasesItems(purchasesItemsDTO.getPurchasesItemsNo(), null,null)).withRel("Selected-Purchases");
+        // 구매 상세 정보 보기 링크 생성
+        Link selectedPurchasesLink = linkTo(methodOn(this.getClass()).selectedPurchases(purchaseItemDTO.getPurchasesItemsNo(), null,null)).withRel("Selected-Purchases");
+        // 상품 목록 리스트 및 검색 링크 생성
         Link allProductsListLink = linkTo(methodOn(ProductsController.class).allProducts(null)).withRel("All-Products-List");
+        // 장바구니 목록 리스트 링크 생성
         Link allCartsListLink = linkTo(methodOn(CartsController.class).allCarts(null,null)).withRel("All-Carts-List");
 
         entityModel.add(allPurchasesListLink);
@@ -52,80 +67,77 @@ public class PurchasesController {
         entityModel.add(allProductsListLink);
         entityModel.add(allCartsListLink);
 
+        // 201 CREATED HTTP Status Code 와 HTTP Body 생성된 구매 번호와 링크를 담아서 반환
         return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
     }
 
     @GetMapping("/purchases-items")
-    public ResponseEntity<EntityModel<ResponseDTO>> allPurchasesItems(@ModelAttribute PageInfo pageInfo, HttpSession session){
+    public ResponseEntity<CollectionModel<PurchasesDTO>> allPurchasesItems(@ModelAttribute PageInfo pageInfo, HttpSession session){
 
         Long userNo = loginService.userLoginCheck(session);
+
         pageInfo.setCount(purchasesService.allPurchasesCount(userNo));
         pageInfo.pageSettings();
-        List<PurchasesListDTO> purchasesList = purchasesService.allPurchasesList(pageInfo, userNo);
 
-        EntityModel<ResponseDTO> entityModel = EntityModel.of(new ResponseDTO("Purchases List"));
+        List<PurchasesDTO> purchasesList = purchasesService.allPurchasesList(pageInfo, userNo);
 
-        for (PurchasesListDTO dto : purchasesList){
+        for (PurchasesDTO dto : purchasesList){
+            // 구매 목록 상세 보기 경로 변수와 파라미터 세팅
             UriComponents uriComponents = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{purchasesItemsNo}")
-                    .replaceQueryParam("page", pageInfo.getPage())
-                    .buildAndExpand(dto.getPurchasesItemsNo());
-
-            Link purchaseItemLink = Link.of(uriComponents.toUriString(), "Selected-Purchases-Item");
-            entityModel.add(purchaseItemLink);
+                                                                    .path("/{purchasesItemsNo}")
+                                                                    .replaceQueryParam("page", pageInfo.getPage())
+                                                                    .buildAndExpand(dto.getPurchasesItemsNo());
+            // 구매 목록 상세 보기 링크 생성 후 DTO에 담기
+            dto.add(Link.of(uriComponents.toUriString(), "Selected-Purchases-Item"));
         }
 
-        UriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentRequest()
-                .replaceQueryParam("page", pageInfo.getStartPage());
+        CollectionModel<PurchasesDTO> collectionModel = CollectionModel.of(purchasesList);
 
-        Link startPageLink = Link.of(builder.toUriString(), "Start-Page");
-
-        builder.replaceQueryParam("page", pageInfo.getPrevPage());
-        Link prevPageLink = Link.of(builder.toUriString(), "Prev-Page");
-
-        builder.replaceQueryParam("page", pageInfo.getPage());
-        Link currentPageLink = Link.of(builder.toUriString(), "Current-Page");
-
-        builder.replaceQueryParam("page", pageInfo.getNextPage());
-        Link nextPageLink = Link.of(builder.toUriString(), "Next-Page");
-
-        builder.replaceQueryParam("page", pageInfo.getEndPage());
-        Link endPageLink = Link.of(builder.toUriString(), "End-Page");
-
-        Link createPurchaseLink = linkTo(methodOn(this.getClass()).purchaseItems(null,null)).withRel("Create-Purchase");
+        // 구매 목록 페이징 처리를 위한 쿼리 파라미터 세팅
+        List<Link> paginationLinks = createLinkService.createPaginationLinks(this.getClass(), pageInfo);
+        // 장바구니 구매하기 링크 생성
+        Link createPurchaseLink = linkTo(methodOn(this.getClass()).createdPurchases(null,null)).withRel("Create-Purchase");
+        // 상품 목록 리스트 및 검색 링크 생성
         Link allProductsListLink = linkTo(methodOn(ProductsController.class).allProducts(null)).withRel("All-Products-List");
+        // 장바구니 목록 리스트 링크 생성
         Link allCartsListLink = linkTo(methodOn(CartsController.class).allCarts(null,null)).withRel("All-Carts-List");
 
-        entityModel.add(startPageLink);
-        entityModel.add(prevPageLink);
-        entityModel.add(currentPageLink);
-        entityModel.add(nextPageLink);
-        entityModel.add(endPageLink);
-        entityModel.add(allProductsListLink);
-        entityModel.add(allCartsListLink);
-        entityModel.add(createPurchaseLink);
+        for (Link link : paginationLinks){
+            // 생성된 페이징 링크를 collectionModel에 순서대로 추가
+            collectionModel.add(link);
+        }
+        collectionModel.add(allProductsListLink);
+        collectionModel.add(allCartsListLink);
+        collectionModel.add(createPurchaseLink);
 
-        return ResponseEntity.status(HttpStatus.OK).body(entityModel);
+        // 200 OK HTTP Status Code 와 HTTP Body 구매 목록 리스트와 링크를 담아서 반환
+        return ResponseEntity.status(HttpStatus.OK).body(collectionModel);
     }
 
     @GetMapping("/purchases-items/{purchasesItemsNo}")
-    public ResponseEntity<EntityModel<PurchasesListDTO>> singlePurchasesItems(@PathVariable int purchasesItemsNo, @ModelAttribute PageInfo pageInfo, HttpSession session){
+    public ResponseEntity<EntityModel<PurchasesDTO>> selectedPurchases(@PathVariable int purchasesItemsNo, @ModelAttribute PageInfo pageInfo, HttpSession session){
 
         Long userNo = loginService.userLoginCheck(session);
+
         pageInfo.prevPageSettings();
-        PurchasesListDTO selectedPurchaseItem = purchasesService.singlePurchasesPosts(purchasesItemsNo,userNo);
+        PurchasesDTO selectedPurchaseItem = purchasesService.selectedPurchases(purchasesItemsNo,userNo);
 
-        EntityModel<PurchasesListDTO> entityModel = EntityModel.of(selectedPurchaseItem);
+        EntityModel<PurchasesDTO> entityModel = EntityModel.of(selectedPurchaseItem);
 
-        UriComponentsBuilder productsList = ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("/purchases-items")
-                .replaceQueryParam("page", pageInfo.getPage());
+        // 이전으로 돌아가기 위해서 이전 구매 목록 리스트 경로 변수와 쿼리 파라미터 세팅
+        UriComponentsBuilder productsList = ServletUriComponentsBuilder.fromCurrentContextPath()
+                                                                    .path("/purchases-items")
+                                                                    .replaceQueryParam("page", pageInfo.getPage());
 
-        Link createPurchaseLink = linkTo(methodOn(this.getClass()).purchaseItems(null,null)).withRel("Create-Purchase");
+        // 장바구니 구매 하기 링크 생성
+        Link createPurchaseLink = linkTo(methodOn(this.getClass()).createdPurchases(null,null)).withRel("Create-Purchase");
+        // 이전 구매 목록 리스트 링크 생성
         Link prevPurchaseListLink = Link.of(productsList.toUriString(), "Prev-By-Purchase-List");
+        // 구매 록록 리스트 링크 생성
         Link allPurchasesListLink = linkTo(methodOn(this.getClass()).allPurchasesItems(null, null)).withRel("All-Purchases-List");
+        // 상품 목록 리스트 및 검색 링크 생성
         Link allProductsListLink = linkTo(methodOn(ProductsController.class).allProducts(null)).withRel("All-Products-List");
+        // 장바구니 목록 리스트 링크 생성
         Link allCartsListLink = linkTo(methodOn(CartsController.class).allCarts(null,null)).withRel("All-Carts-List");
 
         entityModel.add(createPurchaseLink);
@@ -134,6 +146,7 @@ public class PurchasesController {
         entityModel.add(allProductsListLink);
         entityModel.add(allCartsListLink);
 
+        // 200 OK HTTP Status Code 와 HTTP Body 구매 정보와 링크를 담아서 반환
         return ResponseEntity.status(HttpStatus.OK).body(entityModel);
     }
 
