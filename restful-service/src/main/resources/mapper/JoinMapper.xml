@@ -16,7 +16,7 @@
         WHERE BINARY user_email = #{userEmail}
     </select>
 
-    <insert id="save" parameterType="UsersRegisterDTO" useGeneratedKeys="true" keyProperty="userNo">
+    <insert id="createdUsers" parameterType="UsersRegisterDTO" useGeneratedKeys="true" keyProperty="userNo">
         INSERT INTO `USER`
         (user_id, user_password, user_name, user_email)
         VALUES
