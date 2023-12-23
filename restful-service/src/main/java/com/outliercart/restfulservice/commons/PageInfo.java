@@ -3,11 +3,9 @@ package com.outliercart.restfulservice.commons;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 @ToString
 @Getter@Setter
-@Slf4j
 public class PageInfo {
 
     private String searchType;
@@ -19,19 +17,15 @@ public class PageInfo {
     private int pageLimit = 10;
 
     public void pageSettings(){
-        log.info("getpage: "+getPage());
         if (getPage()==0){
             setPage(1);
         }
-        //조금 더 생각해보고 삭제하기
-        log.info("getEndPage : "+getEndPage());
-        if (getPage() > getEndPage())
+        if (getPage() > getEndPage()){
             setPage(1);
-//            throw new PageNotFoundException("존재하지 않는 페이지 입니다.");
+        }
     }
 
     public void prevPageSettings(){
-        log.info("getpage: "+getPage());
         if (getPage()==0){
             setPage(1);
         }
