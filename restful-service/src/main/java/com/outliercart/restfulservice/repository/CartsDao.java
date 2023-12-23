@@ -14,7 +14,7 @@ import java.util.Map;
 @Repository
 public interface CartsDao {
 
-    void saveCart(CartsDTO cartsDTO);
+    void createdCarts(CartsDTO cartsDTO);
 
     void updateCartItemStatus(@Param("params") Map<String, Object> params);
 
@@ -26,5 +26,5 @@ public interface CartsDao {
 
     CartsDTO findByCartItem(@Param("params") Map<String, Object> params);
 
-    CartItemsDTO singleCartsPosts(@Param("params") Map<String, Object> params);
+    CartItemsDTO selectedCarts(@Param("params") Map<String, Object> params);
 }
