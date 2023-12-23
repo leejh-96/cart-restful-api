@@ -2,7 +2,7 @@ package com.outliercart.restfulservice.repository;
 
 import com.outliercart.restfulservice.commons.PageInfo;
 import com.outliercart.restfulservice.dto.CartsDTO;
-import com.outliercart.restfulservice.dto.ProductsRegisterDTO;
+import com.outliercart.restfulservice.dto.ProductsDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -12,13 +12,13 @@ import java.util.List;
 @Repository
 public interface ProductsDao {
 
-    void save(ProductsRegisterDTO productsRegisterDTO);
+    void createdProducts(ProductsDTO productsDTO);
 
     int allProductsCount(PageInfo pageInfo);
 
-    List<ProductsRegisterDTO> allProductsPosts(PageInfo pageInfo);
+    List<ProductsDTO> allProductsPosts(PageInfo pageInfo);
 
-    ProductsRegisterDTO singleProductsPosts(int productNo);
+    ProductsDTO selectedProducts(int productNo);
 
     CartsDTO findByProduct(Integer productNo);
 }
