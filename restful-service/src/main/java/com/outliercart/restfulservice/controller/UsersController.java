@@ -30,18 +30,22 @@ public class UsersController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<EntityModel<ResponseDTO>> createUser(@Validated @RequestBody UsersRegisterDTO usersRegisterDTO){
+    public ResponseEntity<EntityModel<ResponseDTO>> createdUsers(@Validated @RequestBody UsersRegisterDTO usersRegisterDTO){
 
-        UsersRegisterDTO users = usersRegisterService.save(usersRegisterDTO);
+        UsersRegisterDTO users = usersRegisterService.createdUsers(usersRegisterDTO);
 
+        // 생성된 User 리소스 번호를 반환
         EntityModel<ResponseDTO> entityModel = EntityModel.of(new ResponseDTO("UserNo : "+users.getUserNo()));
 
+        // 상품 목록 리스트 링크 생성
         Link allProductsListLink = linkTo(methodOn(ProductsController.class).allProducts(null)).withRel("All-Products-List");
+        // 로그인 링크 생성
         Link loginLink = linkTo(methodOn(this.getClass()).login(null, null)).withRel("Log-in");
 
         entityModel.add(allProductsListLink);
         entityModel.add(loginLink);
 
+        // 201 CREATED Status Code 와 HTTP Body 회원 생성 번호와 링크를 담아서 반환
         return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
     }
 
@@ -50,16 +54,21 @@ public class UsersController {
 
         loginService.login(loginDTO,session);
 
+        // 로그인 생성 메세지를 생성해 반환
         EntityModel<ResponseDTO> entityModel = EntityModel.of(new ResponseDTO("Login : Success"));
 
+        // 로그아웃 링크 생성
         Link logoutLink = linkTo(methodOn(this.getClass()).logout(null)).withRel("Log-out");
+        // 상품 목록 추가 링크 생성
         Link createProductsLink = linkTo(methodOn(ProductsController.class).createProducts(null, null)).withRel("Create-Products");
+        // 상품 목록 리스트 및 검색 링크 생성
         Link allProductsLink = linkTo(methodOn(ProductsController.class).allProducts(null)).withRel("All-Products-List");
 
         entityModel.add(logoutLink);
         entityModel.add(createProductsLink);
         entityModel.add(allProductsLink);
 
+        // 200 OK Status Code 와 HTTP Body 로그인 성공 메세지와 링크를 담아서 반환
         return ResponseEntity.status(HttpStatus.OK).body(entityModel);
     }
 
@@ -68,19 +77,25 @@ public class UsersController {
         HttpSession session = request.getSession(false);
 
         if (session != null){
+            // 세션 삭제
             session.invalidate();
         }
 
+        // 로그아웃 생성 메세지를 생성해 반환
         EntityModel<ResponseDTO> entityModel = EntityModel.of(new ResponseDTO("Logout : Success"));
 
-        Link createUsersLink = linkTo(methodOn(this.getClass()).createUser(null)).withRel("Create-Users");
+        // 회원가입 링크 생성
+        Link createUsersLink = linkTo(methodOn(this.getClass()).createdUsers(null)).withRel("Create-Users");
+        // 상품 목록 리스트 및 검색 링크 생성
         Link allProductsListLink = linkTo(methodOn(ProductsController.class).allProducts(null)).withRel("All-Products-List");
+        // 로그인 링크 생성
         Link loginLink = linkTo(methodOn(this.getClass()).login(null,null)).withRel("Log-in");
 
         entityModel.add(loginLink);
         entityModel.add(createUsersLink);
         entityModel.add(allProductsListLink);
 
+        // 200 OK Status Code 와 HTTP Body 로그아웃 성공 메세지와 링크를 담아서 반환
         return ResponseEntity.status(HttpStatus.OK).body(entityModel);
     }
 
