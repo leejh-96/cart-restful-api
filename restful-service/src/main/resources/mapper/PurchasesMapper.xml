@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.outliercart.restfulservice.repository.PurchasesDao">
 
-    <select id="findByCartItems" parameterType="PurchasesItemsDTO" resultType="PurchasesItemsDTO">
+    <select id="findByCartItems" parameterType="PurchaseItemDTO" resultType="PurchaseItemDTO">
         SELECT  c.cart_no ,c.user_no ,c.product_no ,c.product_quantity as cart_quantity ,
                 p.product_price ,p.product_quantity
         FROM CARTS c
@@ -15,20 +15,20 @@
         AND c.cart_delete_status = 'Y'
     </select>
 
-    <insert id="savePurchaseItems" parameterType="PurchasesItemsDTO" useGeneratedKeys="true" keyProperty="purchasesItemsNo">
+    <insert id="createdPurchases" parameterType="PurchaseItemDTO" useGeneratedKeys="true" keyProperty="purchasesItemsNo">
         INSERT INTO PURCHASEITEM
         (user_no, cart_no, purchase_date)
         VALUES
         (#{userNo}, #{cartNo}, #{purchaseDate})
     </insert>
 
-    <update id="updateProductQuantity" parameterType="PurchasesItemsDTO">
+    <update id="updateProductQuantity" parameterType="PurchaseItemDTO">
         UPDATE PRODUCTS
         SET product_quantity =  product_quantity - #{cartQuantity}
         WHERE product_no = #{productNo}
     </update>
 
-    <update id="updateCartsStatus" parameterType="PurchasesItemsDTO">
+    <update id="updateCartsStatus" parameterType="PurchaseItemDTO">
         UPDATE CARTS
         SET cart_delete_status = 'N'
         WHERE cart_no = #{cartNo}
@@ -40,7 +40,7 @@
         WHERE user_no = #{userNo}
     </select>
 
-    <select id="allPurchasesList" parameterType="PageInfo" resultType="PurchasesListDTO">
+    <select id="allPurchasesList" parameterType="PageInfo" resultType="PurchasesDTO">
         SELECT  ROW_NUMBER() OVER (ORDER BY p.purchaseitem_no DESC) AS postsNum,
                 p.purchaseitem_no AS purchasesItemsNo,
                 p.purchase_date ,
@@ -58,7 +58,7 @@
         LIMIT #{pageInfo.offset},#{pageInfo.pageLimit}
     </select>
 
-    <select id="singlePurchasesPosts" parameterType="Map" resultType="PurchasesListDTO">
+    <select id="selectedPurchases" parameterType="Map" resultType="PurchasesDTO">
         SELECT  ROW_NUMBER() OVER (ORDER BY p.purchaseitem_no DESC) AS postsNum,
                 p.purchaseitem_no AS purchasesItemsNo,
                 p.purchase_date ,
