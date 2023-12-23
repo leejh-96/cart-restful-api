@@ -3,12 +3,13 @@ package com.outliercart.restfulservice.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
 
 @ToString
 @Getter@Setter
-public class PurchasesListDTO {
+public class PurchasesDTO extends RepresentationModel<PurchasesDTO> {
 
     private int postsNum;//구매 리스트 번호
 
