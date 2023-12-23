@@ -30,12 +30,12 @@
 ---
 ### 예외 처리
 
-사용자 정의 예외, 유효성 검사 등 다양한 예외를 통합하여 다루기 위해 `CustomResponseEntityExceptionHandler` 클래스로 정의해 처리했습니다.
+사용자 정의 예외, 유효성 검사 실패 등 다양한 예외를 통합하여 다루기 위해 `CustomResponseEntityExceptionHandler` 클래스로 정의해 처리했습니다.
 
 | 메서드명 | 역할 | 상태 코드 |
 | --- | --- | --- |
 | allExceptions | 사용자 정의 예외 클래스 이외의 예외를 처리합니다. | 500(INTERNAL SERVER ERROR) 상태 코드를 반환합니다. |
-| usersRegisterExceptions | 회원가입 ID,EMAIL에 대해 이미 존재하는 리소스를 합니다. | 409(CONFLICT) 상태 코드를 반환합니다. |
+| usersRegisterExceptions | 회원가입 시 ID,EMAIL에 대해 이미 존재하는 리소스들을 처리합니다. | 409(CONFLICT) 상태 코드를 반환합니다. |
 | userNotFoundExceptions | 찾을 수 없는 회원을 처리합니다. | 404(NOT FOUND) 상태 코드를 반환합니다. |
 | productNotFoundExceptions | 찾을 수 없는 상품을 처리합니다. | 404(NOT FOUND) 상태 코드를 반환합니다. |
 | pageNotFoundExceptions | 찾을 수 없는 페이지를 처리합니다. | 404(NOT FOUND) 상태 코드를 반환합니다. |
