@@ -20,13 +20,14 @@
             </if>
         </if>
         <if test="searchType == null or searchType == ''">
+                <!-- 검색 내용만 작성한 조건 -->
             <if test="searchContent != null">
                 WHERE CONCAT(product_name, product_price, product_content) LIKE CONCAT('%', #{searchContent}, '%')
             </if>
         </if>
     </sql>
 
-    <insert id="save" parameterType="ProductsRegisterDTO" useGeneratedKeys="true" keyProperty="productNo">
+    <insert id="createdProducts" parameterType="ProductsDTO" useGeneratedKeys="true" keyProperty="productNo">
         INSERT INTO PRODUCTS
         (product_name, product_price, product_quantity, product_content)
         VALUES
@@ -39,14 +40,14 @@
         <include refid="searchSql"/>
     </select>
 
-    <select id="allProductsPosts" parameterType="PageInfo" resultType="ProductsRegisterDTO">
+    <select id="allProductsPosts" parameterType="PageInfo" resultType="ProductsDTO">
         SELECT ROW_NUMBER() OVER (ORDER BY p.product_no DESC) AS productNum, p.*
         FROM PRODUCTS p
         <include refid="searchSql"/>
         LIMIT #{offset},#{pageLimit}
     </select>
 
-    <select id="singleProductsPosts" parameterType="int" resultType="ProductsRegisterDTO">
+    <select id="selectedProducts" parameterType="int" resultType="ProductsDTO">
         SELECT *
         FROM PRODUCTS
         WHERE product_no = #{productNo}
