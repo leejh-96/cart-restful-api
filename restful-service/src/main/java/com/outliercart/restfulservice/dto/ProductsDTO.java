@@ -11,9 +11,9 @@ import org.springframework.hateoas.RepresentationModel;
 @Getter@Setter
 public class ProductsDTO extends RepresentationModel<ProductsDTO> {
 
-    private int productNum;
+    private int productNum;//상품 게시물 번호
 
-    private int productNo;
+    private int productNo;//상품 생성 번호
 
     @NotBlank(message = "상품 이름은 필수입니다.")
     @Length(max = 33, message = "상품 이름은 최대 33자까지 허용됩니다.")
