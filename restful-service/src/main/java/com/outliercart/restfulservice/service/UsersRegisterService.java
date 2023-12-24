@@ -17,21 +17,29 @@ public class UsersRegisterService {
         this.usersRegisterDao = usersRegisterDao;
     }
 
+    /**
+     * 새로운 사용자를 등록합니다.
+     *
+     * @param usersRegisterDTO 등록할 사용자 정보
+     * @return 등록된 사용자 정보
+     * @throws UsersRegisterException 이미 사용 중인 아이디 또는 이메일일 때 예외 처리
+     */
     public UsersRegisterDTO createdUsers(UsersRegisterDTO usersRegisterDTO) {
-
-        //사용중인 ID 인지, 사용중인 EMAIL 인지 체크.
+        /* 사용 중인 아이디 체크 후 예외 처리 */
         if (usersRegisterDao.findById(usersRegisterDTO.getUserId()) != 0)
             throw new UsersRegisterException("이미 사용중인 아이디입니다.");
 
+        /* 사용 중인 이메일 체크 후 예외 처리 */
         if (usersRegisterDao.findByEmail(usersRegisterDTO.getUserEmail()) != 0)
             throw new UsersRegisterException("이미 사용중인 이메일입니다.");
 
-        //jasypt 라이브러리를 사용하여 비밀번호 암호화.
+        /* 비밀번호 암호화 */
         String encryptPassword = passwordService.encryptPassword(usersRegisterDTO.getUserPassword());
         usersRegisterDTO.setUserPassword(encryptPassword);
 
-        //DB 저장.
+        /* 사용자 정보 저장 */
         usersRegisterDao.createdUsers(usersRegisterDTO);
+
         return usersRegisterDTO;
     }
 
