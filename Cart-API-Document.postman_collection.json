@@ -30,7 +30,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\": \"outlier1\", \r\n    \"userPassword\": \"outlier1\", \r\n    \"userName\": \"홍길동\", \r\n    \"userEmail\": \"outlier1@abc.com\"\r\n}",
+							"raw": "{\r\n    \"userId\": \"outlier1\", // 유저 아이디 : null이나 빈 문자열은 허용하지 않습니다.\r\n    \"userPassword\": \"outlier1\", //유저 비밀번호 : null이나 빈 문자열은 허용하지 않습니다.\r\n    \"userName\": \"홍길동\", // 유저 이름 : null이나 빈 문자열은 허용하지 않습니다.\r\n    \"userEmail\": \"outlier1@abc.com\" // 유저 이메일 : 'username@domain.com' 과 같은 형식의 이메일을 체크합니다. \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -96,7 +96,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\": \"outlier1\", \r\n    \"userPassword\": \"outlier1\" \r\n}",
+							"raw": "{\r\n    \"userId\": \"outlier1\", // 유저 아이디 : null이나 빈 문자열은 허용하지 않습니다.\r\n    \"userPassword\": \"outlier1\" // 유저 비밀번호 : null이나 빈 문자열은 허용하지 않습니다.\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -253,7 +253,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"productName\": \"짜파게티\", \n    \"productPrice\": 1500, \n    \"productQuantity\": 800, \n    \"productContent\": \"몸에 좋고 맛도 좋은 짜파게티\" \n}",
+							"raw": "{\n    \"productName\": \"짜파게티\", // 상품 이름 : 최대 33까지 허용되며, null이나 빈 문자열은 허용하지 않습니다.\n    \"productPrice\": 1500, // 상품 가격 : 최소 1,000원 ~ 최대 100,000원까지 허용됩니다.\n    \"productQuantity\": 800, // 상품 수량 : 최소 10개 ~ 최대 1,000개까지 허용됩니다.\n    \"productContent\": \"몸에 좋고 맛도 좋은 짜파게티\" // 상품 설명 : 최대 100자까지 허용되며, null이나 빈 문자열은 허용하지 않습니다.\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -593,7 +593,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"productNo\": 1, \r\n    \"productQuantity\": 20 \r\n}",
+							"raw": "{\r\n    \"productNo\": 1, //장바구니에 담을 상품 번호\r\n    \"productQuantity\": 20 //해당 상품 수량\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -982,7 +982,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cartNo\": 12, \r\n    \"userNo\": 1  \r\n}",
+							"raw": "{\r\n    \"cartNo\": 12, //구매할 장바구니 번호\r\n    \"userNo\": 1  //구매 유저 번호\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
