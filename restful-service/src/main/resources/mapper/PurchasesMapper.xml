@@ -5,14 +5,18 @@
 <mapper namespace="com.outliercart.restfulservice.repository.PurchasesDao">
 
     <select id="findByCartItems" parameterType="PurchaseItemDTO" resultType="PurchaseItemDTO">
-        SELECT  c.cart_no ,c.user_no ,c.product_no ,c.product_quantity as cart_quantity ,
-                p.product_price ,p.product_quantity
+        SELECT  c.cart_no ,
+                c.user_no ,
+                c.product_no ,
+                c.product_quantity as cart_quantity ,
+                p.product_price ,
+                p.product_quantity
         FROM CARTS c
         INNER JOIN PRODUCTS p on c.product_no = p.product_no
         INNER JOIN `USER` u  on c.user_no = u.user_no
         WHERE c.user_no = #{userNo}
-        AND c.cart_no = #{cartNo}
-        AND c.cart_delete_status = 'Y'
+            AND c.cart_no = #{cartNo}
+            AND c.cart_delete_status = 'Y'
     </select>
 
     <insert id="createdPurchases" parameterType="PurchaseItemDTO" useGeneratedKeys="true" keyProperty="purchasesItemsNo">
@@ -54,7 +58,7 @@
         INNER JOIN CARTS c ON p.cart_no = c.cart_no
         INNER JOIN PRODUCTS p2 ON p2.product_no = c.product_no
         WHERE p.user_no = #{userNo}
-        AND c.cart_delete_status = 'N'
+            AND c.cart_delete_status = 'N'
         LIMIT #{pageInfo.offset},#{pageInfo.pageLimit}
     </select>
 
@@ -72,8 +76,8 @@
         INNER JOIN CARTS c ON p.cart_no = c.cart_no
         INNER JOIN PRODUCTS p2 ON p2.product_no = c.product_no
         WHERE p.user_no = #{params.userNo}
-        AND c.cart_delete_status = 'N'
-        AND p.purchaseitem_no = #{params.purchasesItemsNo}
+            AND c.cart_delete_status = 'N'
+            AND p.purchaseitem_no = #{params.purchasesItemsNo}
     </select>
 
 </mapper>
