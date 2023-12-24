@@ -2,7 +2,7 @@
 - Docker와 AWS EC2를 사용해 배포는 완료했지만, 수정할 부분과 개선점은 계속해서 수정하도록 하겠습니다.
 ### 배포 및 인프라
 
-- `AWS EC2` `AWS RDS` `Docker`
+- `AWS EC2(Ubuntu)` `AWS RDS` `Docker`
 
 ### 백엔드
 
