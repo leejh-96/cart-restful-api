@@ -120,8 +120,11 @@ Spring Validation을 활용해 사용자의 입력 데이터의 유효성 검사
 - 적용된 기능 : 회원가입, 로그인, 쇼핑 목록 상품 추가, 장바구니 담기
 ---
 # API 명세서
+- `Cart-API-Document.postman_collection.json` 파일은 Postman Collection JSON 파일 형태로 저장된 API 명세서입니다.
+    - https://github.com/leejh-96/cart-restful-api/blob/main/Cart-API-Document.postman_collection.json
+        - 위의 경로에서 이 파일을 다운로드하여 Postman에서 Import하여 사용할 수 있습니다.
 - 아래의 링크를 통해서도 API 명세서를 보실 수 있습니다.
-- https://documenter.getpostman.com/view/28000436/2s9YkraKHx
+    - https://documenter.getpostman.com/view/28000436/2s9YkraKHx
 ### 서버 주소
 - http://13.124.47.242:8084
 ### 테스트 계정 정보
