@@ -21,7 +21,7 @@
         SELECT COUNT(*)
         FROM CARTS
         WHERE user_no = #{userNo}
-        AND cart_delete_status = 'Y'
+            AND cart_delete_status = 'Y'
     </select>
 
     <select id="allCartsItems" parameterType="PageInfo" resultType="CartItemsDTO">
@@ -37,7 +37,7 @@
         FROM CARTS c
         INNER JOIN PRODUCTS p on c.product_no = p.product_no
         WHERE c.user_no = #{userNo}
-        AND c.cart_delete_status = 'Y'
+            AND c.cart_delete_status = 'Y'
         LIMIT #{pageInfo.offset},#{pageInfo.pageLimit}
     </select>
 
@@ -45,23 +45,23 @@
         SELECT *
         FROM CARTS c
         WHERE user_no = #{params.userNo}
-        AND cart_no = #{params.cartNo}
-        AND cart_delete_status = 'Y'
+            AND cart_no = #{params.cartNo}
+            AND cart_delete_status = 'Y'
     </select>
 
     <update id="updateCartItemStatus" parameterType="Map">
         UPDATE CARTS
         SET cart_delete_status = 'N'
         WHERE cart_no = #{params.cartNo}
-        AND user_no = #{params.userNo}
-        AND cart_delete_status = 'Y'
+            AND user_no = #{params.userNo}
+            AND cart_delete_status = 'Y'
     </update>
 
     <update id="updateAllCartItemStatus" parameterType="long">
         UPDATE CARTS
         SET cart_delete_status = 'N'
         WHERE user_no = #{userNo}
-        AND cart_delete_status = 'Y'
+            AND cart_delete_status = 'Y'
     </update>
 
     <select id="selectedCarts" parameterType="Map" resultType="CartItemsDTO">
@@ -77,8 +77,8 @@
         FROM CARTS c
         INNER JOIN PRODUCTS p on c.product_no = p.product_no
         WHERE c.user_no = #{params.userNo}
-        AND c.cart_delete_status = 'Y'
-        AND c.cart_no = #{params.cartNo}
+            AND c.cart_delete_status = 'Y'
+            AND c.cart_no = #{params.cartNo}
     </select>
 
 </mapper>

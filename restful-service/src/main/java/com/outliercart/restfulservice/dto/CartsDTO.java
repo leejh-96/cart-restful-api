@@ -9,11 +9,11 @@ import lombok.ToString;
 @Getter@Setter
 public class CartsDTO {
 
-    private int count;
+    private int count;//총 카트 목록 갯수
 
-    private int cartNo;
+    private int cartNo;//카트 번호
 
-    private Long userNo;
+    private Long userNo;//유저 번호
 
     @Min(value = 1, message = "상품 번호는 최소 1번부터 입니다.")
     private Integer productNo;//상품 번호
