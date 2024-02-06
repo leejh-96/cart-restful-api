@@ -1,0 +1,1259 @@
+{
+	"info": {
+		"_postman_id": "c5b2770e-1225-4e43-a43b-897ee8ab9e9d",
+		"name": "Cart-API-Document",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "28000436"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "회원가입",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"outlier1\", // 유저 아이디 : null이나 빈 문자열은 허용하지 않습니다.\r\n    \"userPassword\": \"outlier1\", //유저 비밀번호 : null이나 빈 문자열은 허용하지 않습니다.\r\n    \"userName\": \"홍길동\", // 유저 이름 : null이나 빈 문자열은 허용하지 않습니다.\r\n    \"userEmail\": \"outlier1@abc.com\" // 유저 이메일 : 'username@domain.com' 과 같은 형식의 이메일을 체크합니다. \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://13.124.47.242:8084/users"
+					},
+					"response": [
+						{
+							"name": "회원가입 응답",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"outlier1\", // 유저 아이디 : null이나 빈 문자열은 허용하지 않습니다.\r\n    \"userPassword\": \"outlier1\", //유저 비밀번호 : null이나 빈 문자열은 허용하지 않습니다.\r\n    \"userName\": \"홍길동\", // 유저 이름 : null이나 빈 문자열은 허용하지 않습니다.\r\n    \"userEmail\": \"outlier1@abc.com\" // 유저 이메일 : 'username@domain.com' 과 같은 형식의 이메일을 체크합니다. \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://13.124.47.242:8084/users"
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Dec 2023 04:14:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"information\": \"UserNo : 1\",\n    \"_links\": {\n        \"All-Products-List\": {\n            \"href\": \"http://13.124.47.242:8084/products\"\n        },\n        \"Log-in\": {\n            \"href\": \"http://13.124.47.242:8084/users/login\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "로그인",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"outlier1\", // 유저 아이디 : null이나 빈 문자열은 허용하지 않습니다.\r\n    \"userPassword\": \"outlier1\" // 유저 비밀번호 : null이나 빈 문자열은 허용하지 않습니다.\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://13.124.47.242:8084/users/login"
+					},
+					"response": [
+						{
+							"name": "로그인 응답",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"outlier1\", // 유저 아이디 : null이나 빈 문자열은 허용하지 않습니다.\r\n    \"userPassword\": \"outlier1\" // 유저 비밀번호 : null이나 빈 문자열은 허용하지 않습니다.\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://13.124.47.242:8084/users/login"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Set-Cookie",
+									"value": "JSESSIONID=883643222DCAAC748DFF3025C8949EC0; Path=/; HttpOnly"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Dec 2023 04:15:40 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"information\": \"Login : Success\",\n    \"_links\": {\n        \"Log-out\": {\n            \"href\": \"http://13.124.47.242:8084/users/logout\"\n        },\n        \"Create-Products\": {\n            \"href\": \"http://13.124.47.242:8084/products\"\n        },\n        \"All-Products-List\": {\n            \"href\": \"http://13.124.47.242:8084/products\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "로그아웃",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://13.124.47.242:8084/users/logout"
+					},
+					"response": [
+						{
+							"name": "로그아웃 응답",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://13.124.47.242:8084/users/logout"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Dec 2023 04:16:59 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"information\": \"Logout : Success\",\n    \"_links\": {\n        \"Log-in\": {\n            \"href\": \"http://13.124.47.242:8084/users/login\"\n        },\n        \"Create-Users\": {\n            \"href\": \"http://13.124.47.242:8084/users\"\n        },\n        \"All-Products-List\": {\n            \"href\": \"http://13.124.47.242:8084/products\"\n        }\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "쇼핑 목록 추가",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productName\": \"짜파게티\", // 상품 이름 : 최대 33까지 허용되며, null이나 빈 문자열은 허용하지 않습니다.\n    \"productPrice\": 1500, // 상품 가격 : 최소 1,000원 ~ 최대 100,000원까지 허용됩니다.\n    \"productQuantity\": 800, // 상품 수량 : 최소 10개 ~ 최대 1,000개까지 허용됩니다.\n    \"productContent\": \"몸에 좋고 맛도 좋은 짜파게티\" // 상품 설명 : 최대 100자까지 허용되며, null이나 빈 문자열은 허용하지 않습니다.\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://13.124.47.242:8084/products"
+					},
+					"response": [
+						{
+							"name": "쇼핑 목록 추가 응답",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"productName\": \"짜파게티\", // 상품 이름 : 최대 33까지 허용되며, null이나 빈 문자열은 허용하지 않습니다.\n    \"productPrice\": 1500, // 상품 가격 : 최소 1,000원 ~ 최대 100,000원까지 허용됩니다.\n    \"productQuantity\": 800, // 상품 수량 : 최소 10개 ~ 최대 1,000개까지 허용됩니다.\n    \"productContent\": \"몸에 좋고 맛도 좋은 짜파게티\" // 상품 설명 : 최대 100자까지 허용되며, null이나 빈 문자열은 허용하지 않습니다.\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://13.124.47.242:8084/products"
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Dec 2023 04:17:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"information\": \"ProductNo : 1\",\n    \"_links\": {\n        \"All-Products-List\": {\n            \"href\": \"http://13.124.47.242:8084/products\"\n        },\n        \"Selected-Products\": {\n            \"href\": \"http://13.124.47.242:8084/products/1\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "쇼핑 목록 리스트 및 검색",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://13.124.47.242:8084/products",
+							"protocol": "http",
+							"host": [
+								"13",
+								"124",
+								"47",
+								"242"
+							],
+							"port": "8084",
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "searchType",
+									"value": "productName",
+									"description": "검색카테고리 : productName(상품이름),productPrice(상품가격),productContent(상품설명)",
+									"disabled": true
+								},
+								{
+									"key": "searchContent",
+									"value": "짜파",
+									"description": "검색내용을 작성하여 검색할 수 있습니다.",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "페이지 값을 생략할 경우 기본값 1이 할당됩니다.",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "쇼핑 목록 리스트 및 검색 응답",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://13.124.47.242:8084/products",
+									"protocol": "http",
+									"host": [
+										"13",
+										"124",
+										"47",
+										"242"
+									],
+									"port": "8084",
+									"path": [
+										"products"
+									],
+									"query": [
+										{
+											"key": "searchType",
+											"value": "productName",
+											"description": "검색카테고리 : productName(상품이름),productPrice(상품가격),productContent(상품설명)",
+											"disabled": true
+										},
+										{
+											"key": "searchContent",
+											"value": "짜파",
+											"description": "검색내용을 작성하여 검색할 수 있습니다.",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"description": "페이지 값을 생략할 경우 기본값 1이 할당됩니다.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Dec 2023 04:39:57 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"_embedded\": {\n        \"productsDTOList\": [\n            {\n                \"productNum\": 1,\n                \"productNo\": 12,\n                \"productName\": \"이펙티브 자바\",\n                \"productPrice\": 15000,\n                \"productQuantity\": 800,\n                \"productContent\": \"조슈아 블로크 선생..\",\n                \"_links\": {\n                    \"Selected-Products\": {\n                        \"href\": \"http://13.124.47.242:8084/products/12?searchType&searchContent&page=1\"\n                    }\n                }\n            },\n            {\n                \"productNum\": 2,\n                \"productNo\": 11,\n                \"productName\": \"노스페이스 패딩\",\n                \"productPrice\": 100000,\n                \"productQuantity\": 79,\n                \"productContent\": \"노스페이스 패딩 구스다운\",\n                \"_links\": {\n                    \"Selected-Products\": {\n                        \"href\": \"http://13.124.47.242:8084/products/11?searchType&searchContent&page=1\"\n                    }\n                }\n            },\n            {\n                \"productNum\": 3,\n                \"productNo\": 10,\n                \"productName\": \"청바지\",\n                \"productPrice\": 10000,\n                \"productQuantity\": 330,\n                \"productContent\": \"남성 청바지\",\n                \"_links\": {\n                    \"Selected-Products\": {\n                        \"href\": \"http://13.124.47.242:8084/products/10?searchType&searchContent&page=1\"\n                    }\n                }\n            },\n            {\n                \"productNum\": 4,\n                \"productNo\": 9,\n                \"productName\": \"자바의 정석\",\n                \"productPrice\": 10000,\n                \"productQuantity\": 280,\n                \"productContent\": \"(베스트셀러)자바의 정석\",\n                \"_links\": {\n                    \"Selected-Products\": {\n                        \"href\": \"http://13.124.47.242:8084/products/9?searchType&searchContent&page=1\"\n                    }\n                }\n            },\n            {\n                \"productNum\": 5,\n                \"productNo\": 8,\n                \"productName\": \"아이폰 15\",\n                \"productPrice\": 100000,\n                \"productQuantity\": 130,\n                \"productContent\": \"최신 아이폰 15\",\n                \"_links\": {\n                    \"Selected-Products\": {\n                        \"href\": \"http://13.124.47.242:8084/products/8?searchType&searchContent&page=1\"\n                    }\n                }\n            },\n            {\n                \"productNum\": 6,\n                \"productNo\": 7,\n                \"productName\": \"삼겹살 150g\",\n                \"productPrice\": 20000,\n                \"productQuantity\": 130,\n                \"productContent\": \"제주 흑돼지 삼겹살 150g\",\n                \"_links\": {\n                    \"Selected-Products\": {\n                        \"href\": \"http://13.124.47.242:8084/products/7?searchType&searchContent&page=1\"\n                    }\n                }\n            },\n            {\n                \"productNum\": 7,\n                \"productNo\": 6,\n                \"productName\": \"백산수 100ml\",\n                \"productPrice\": 2000,\n                \"productQuantity\": 980,\n                \"productContent\": \"백산수 100ml\",\n                \"_links\": {\n                    \"Selected-Products\": {\n                        \"href\": \"http://13.124.47.242:8084/products/6?searchType&searchContent&page=1\"\n                    }\n                }\n            },\n            {\n                \"productNum\": 8,\n                \"productNo\": 5,\n                \"productName\": \"볼펜\",\n                \"productPrice\": 1000,\n                \"productQuantity\": 980,\n                \"productContent\": \"모나미 볼펜\",\n                \"_links\": {\n                    \"Selected-Products\": {\n                        \"href\": \"http://13.124.47.242:8084/products/5?searchType&searchContent&page=1\"\n                    }\n                }\n            },\n            {\n                \"productNum\": 9,\n                \"productNo\": 4,\n                \"productName\": \"중고 노트북\",\n                \"productPrice\": 100000,\n                \"productQuantity\": 980,\n                \"productContent\": \"LG gram 17인치 중고 노트북\",\n                \"_links\": {\n                    \"Selected-Products\": {\n                        \"href\": \"http://13.124.47.242:8084/products/4?searchType&searchContent&page=1\"\n                    }\n                }\n            },\n            {\n                \"productNum\": 10,\n                \"productNo\": 3,\n                \"productName\": \"선풍기\",\n                \"productPrice\": 10000,\n                \"productQuantity\": 80,\n                \"productContent\": \"시원한 선풍기\",\n                \"_links\": {\n                    \"Selected-Products\": {\n                        \"href\": \"http://13.124.47.242:8084/products/3?searchType&searchContent&page=1\"\n                    }\n                }\n            }\n        ]\n    },\n    \"_links\": {\n        \"Start-Page\": {\n            \"href\": \"http://13.124.47.242:8084/products?searchType&searchContent&page=1\"\n        },\n        \"Prev-Page\": {\n            \"href\": \"http://13.124.47.242:8084/products?searchType&searchContent&page=1\"\n        },\n        \"Current-Page\": {\n            \"href\": \"http://13.124.47.242:8084/products?searchType&searchContent&page=1\"\n        },\n        \"Next-Page\": {\n            \"href\": \"http://13.124.47.242:8084/products?searchType&searchContent&page=2\"\n        },\n        \"End-Page\": {\n            \"href\": \"http://13.124.47.242:8084/products?searchType&searchContent&page=2\"\n        },\n        \"Create-Products\": {\n            \"href\": \"http://13.124.47.242:8084/products\"\n        },\n        \"All-Carts-List\": {\n            \"href\": \"http://13.124.47.242:8084/carts\"\n        },\n        \"All-Purchase-List\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "상품 상세 보기",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://13.124.47.242:8084/products/1",
+							"protocol": "http",
+							"host": [
+								"13",
+								"124",
+								"47",
+								"242"
+							],
+							"port": "8084",
+							"path": [
+								"products",
+								"1"
+							],
+							"query": [
+								{
+									"key": "searchType",
+									"value": "productName",
+									"description": "이전의 검색한 검색 타입입니다.",
+									"disabled": true
+								},
+								{
+									"key": "searchContent",
+									"value": "짜파",
+									"description": "이전의 검색한 검색 내용입니다.",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "이전의 검색한 검색타입,검색내용에 대한 페이지 정보 번호입니다.",
+									"disabled": true
+								},
+								{
+									"key": "{productNo}",
+									"value": "1",
+									"description": "상품 번호입니다.",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "상품 상세 보기 응답",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://13.124.47.242:8084/products/1",
+									"protocol": "http",
+									"host": [
+										"13",
+										"124",
+										"47",
+										"242"
+									],
+									"port": "8084",
+									"path": [
+										"products",
+										"1"
+									],
+									"query": [
+										{
+											"key": "searchType",
+											"value": "productName",
+											"description": "이전의 검색한 검색 타입입니다.",
+											"disabled": true
+										},
+										{
+											"key": "searchContent",
+											"value": "짜파",
+											"description": "이전의 검색한 검색 내용입니다.",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"description": "이전의 검색한 검색타입,검색내용에 대한 페이지 정보 번호입니다.",
+											"disabled": true
+										},
+										{
+											"key": "{productNo}",
+											"value": "1",
+											"description": "상품 번호입니다.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Dec 2023 04:28:03 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"productNum\": 0,\n    \"productNo\": 1,\n    \"productName\": \"짜파게티\",\n    \"productPrice\": 1500,\n    \"productQuantity\": 800,\n    \"productContent\": \"몸에 좋고 맛도 좋은 짜파게티\",\n    \"_links\": {\n        \"Prev-By-Product-List\": {\n            \"href\": \"http://13.124.47.242:8084/products?searchType&searchContent&page=1\"\n        },\n        \"Create-Carts\": {\n            \"href\": \"http://13.124.47.242:8084/carts\"\n        }\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Carts",
+			"item": [
+				{
+					"name": "장바구니 담기",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productNo\": 1, //장바구니에 담을 상품 번호\r\n    \"productQuantity\": 20 //해당 상품 수량\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://13.124.47.242:8084/carts"
+					},
+					"response": [
+						{
+							"name": "장바구니 담기 응답",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"productNo\": 1, //장바구니에 담을 상품 번호\r\n    \"productQuantity\": 20 //해당 상품 수량\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://13.124.47.242:8084/carts"
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Dec 2023 04:28:55 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"information\": \"CartNo : 1\",\n    \"_links\": {\n        \"All-Carts-List\": {\n            \"href\": \"http://13.124.47.242:8084/carts\"\n        },\n        \"Selected-Carts\": {\n            \"href\": \"http://13.124.47.242:8084/carts/1\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "장바구니 목록 리스트",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://13.124.47.242:8084/carts",
+							"protocol": "http",
+							"host": [
+								"13",
+								"124",
+								"47",
+								"242"
+							],
+							"port": "8084",
+							"path": [
+								"carts"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "페이지 값을 생략할 경우 기본값 1이 할당됩니다.",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "장바구니 목록 리스트 응답",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://13.124.47.242:8084/carts",
+									"protocol": "http",
+									"host": [
+										"13",
+										"124",
+										"47",
+										"242"
+									],
+									"port": "8084",
+									"path": [
+										"carts"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "페이지 값을 생략할 경우 기본값 1이 할당됩니다.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Dec 2023 04:41:35 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"_embedded\": {\n        \"cartItemsDTOList\": [\n            {\n                \"cartNum\": 1,\n                \"cartNo\": 33,\n                \"userNo\": 1,\n                \"productNo\": 11,\n                \"productQuantity\": 20,\n                \"productName\": \"노스페이스 패딩\",\n                \"productPrice\": 100000,\n                \"totalPrice\": 2000000,\n                \"productContent\": \"노스페이스 패딩 구스다운\",\n                \"_links\": {\n                    \"Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/33?page=1\"\n                    },\n                    \"Remove-Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/33\"\n                    }\n                }\n            },\n            {\n                \"cartNum\": 2,\n                \"cartNo\": 32,\n                \"userNo\": 1,\n                \"productNo\": 10,\n                \"productQuantity\": 20,\n                \"productName\": \"청바지\",\n                \"productPrice\": 10000,\n                \"totalPrice\": 200000,\n                \"productContent\": \"남성 청바지\",\n                \"_links\": {\n                    \"Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/32?page=1\"\n                    },\n                    \"Remove-Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/32\"\n                    }\n                }\n            },\n            {\n                \"cartNum\": 3,\n                \"cartNo\": 31,\n                \"userNo\": 1,\n                \"productNo\": 9,\n                \"productQuantity\": 20,\n                \"productName\": \"자바의 정석\",\n                \"productPrice\": 10000,\n                \"totalPrice\": 200000,\n                \"productContent\": \"(베스트셀러)자바의 정석\",\n                \"_links\": {\n                    \"Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/31?page=1\"\n                    },\n                    \"Remove-Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/31\"\n                    }\n                }\n            },\n            {\n                \"cartNum\": 4,\n                \"cartNo\": 30,\n                \"userNo\": 1,\n                \"productNo\": 8,\n                \"productQuantity\": 20,\n                \"productName\": \"아이폰 15\",\n                \"productPrice\": 100000,\n                \"totalPrice\": 2000000,\n                \"productContent\": \"최신 아이폰 15\",\n                \"_links\": {\n                    \"Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/30?page=1\"\n                    },\n                    \"Remove-Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/30\"\n                    }\n                }\n            },\n            {\n                \"cartNum\": 5,\n                \"cartNo\": 29,\n                \"userNo\": 1,\n                \"productNo\": 7,\n                \"productQuantity\": 20,\n                \"productName\": \"삼겹살 150g\",\n                \"productPrice\": 20000,\n                \"totalPrice\": 400000,\n                \"productContent\": \"제주 흑돼지 삼겹살 150g\",\n                \"_links\": {\n                    \"Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/29?page=1\"\n                    },\n                    \"Remove-Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/29\"\n                    }\n                }\n            },\n            {\n                \"cartNum\": 6,\n                \"cartNo\": 28,\n                \"userNo\": 1,\n                \"productNo\": 6,\n                \"productQuantity\": 20,\n                \"productName\": \"백산수 100ml\",\n                \"productPrice\": 2000,\n                \"totalPrice\": 40000,\n                \"productContent\": \"백산수 100ml\",\n                \"_links\": {\n                    \"Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/28?page=1\"\n                    },\n                    \"Remove-Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/28\"\n                    }\n                }\n            },\n            {\n                \"cartNum\": 7,\n                \"cartNo\": 27,\n                \"userNo\": 1,\n                \"productNo\": 5,\n                \"productQuantity\": 20,\n                \"productName\": \"볼펜\",\n                \"productPrice\": 1000,\n                \"totalPrice\": 20000,\n                \"productContent\": \"모나미 볼펜\",\n                \"_links\": {\n                    \"Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/27?page=1\"\n                    },\n                    \"Remove-Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/27\"\n                    }\n                }\n            },\n            {\n                \"cartNum\": 8,\n                \"cartNo\": 26,\n                \"userNo\": 1,\n                \"productNo\": 4,\n                \"productQuantity\": 20,\n                \"productName\": \"중고 노트북\",\n                \"productPrice\": 100000,\n                \"totalPrice\": 2000000,\n                \"productContent\": \"LG gram 17인치 중고 노트북\",\n                \"_links\": {\n                    \"Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/26?page=1\"\n                    },\n                    \"Remove-Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/26\"\n                    }\n                }\n            },\n            {\n                \"cartNum\": 9,\n                \"cartNo\": 25,\n                \"userNo\": 1,\n                \"productNo\": 3,\n                \"productQuantity\": 20,\n                \"productName\": \"선풍기\",\n                \"productPrice\": 10000,\n                \"totalPrice\": 200000,\n                \"productContent\": \"시원한 선풍기\",\n                \"_links\": {\n                    \"Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/25?page=1\"\n                    },\n                    \"Remove-Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/25\"\n                    }\n                }\n            },\n            {\n                \"cartNum\": 10,\n                \"cartNo\": 24,\n                \"userNo\": 1,\n                \"productNo\": 2,\n                \"productQuantity\": 20,\n                \"productName\": \"신라면\",\n                \"productPrice\": 1500,\n                \"totalPrice\": 30000,\n                \"productContent\": \"얼큰한 신라면\",\n                \"_links\": {\n                    \"Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/24?page=1\"\n                    },\n                    \"Remove-Selected-Carts\": {\n                        \"href\": \"http://13.124.47.242:8084/carts/24\"\n                    }\n                }\n            }\n        ]\n    },\n    \"_links\": {\n        \"Start-Page\": {\n            \"href\": \"http://13.124.47.242:8084/carts?page=1\"\n        },\n        \"Prev-Page\": {\n            \"href\": \"http://13.124.47.242:8084/carts?page=1\"\n        },\n        \"Current-Page\": {\n            \"href\": \"http://13.124.47.242:8084/carts?page=1\"\n        },\n        \"Next-Page\": {\n            \"href\": \"http://13.124.47.242:8084/carts?page=2\"\n        },\n        \"End-Page\": {\n            \"href\": \"http://13.124.47.242:8084/carts?page=2\"\n        },\n        \"Create-Carts\": {\n            \"href\": \"http://13.124.47.242:8084/carts\"\n        },\n        \"Remove-All-Carts\": {\n            \"href\": \"http://13.124.47.242:8084/carts\"\n        },\n        \"All-Purchase-List\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "장바구니 목록 상세 보기",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://13.124.47.242:8084/carts/23",
+							"protocol": "http",
+							"host": [
+								"13",
+								"124",
+								"47",
+								"242"
+							],
+							"port": "8084",
+							"path": [
+								"carts",
+								"23"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "이전의 페이지 번호 정보입니다.",
+									"disabled": true
+								},
+								{
+									"key": "{cartNo}",
+									"value": "1",
+									"description": "장바구니 번호입니다.",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "장바구니 목록 상세 보기 응답",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://13.124.47.242:8084/carts/23",
+									"protocol": "http",
+									"host": [
+										"13",
+										"124",
+										"47",
+										"242"
+									],
+									"port": "8084",
+									"path": [
+										"carts",
+										"23"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "이전의 페이지 번호 정보입니다.",
+											"disabled": true
+										},
+										{
+											"key": "{cartNo}",
+											"value": "1",
+											"description": "장바구니 번호입니다.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Dec 2023 04:43:52 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"cartNum\": 1,\n    \"cartNo\": 23,\n    \"userNo\": 1,\n    \"productNo\": 1,\n    \"productQuantity\": 20,\n    \"productName\": \"짜파게티\",\n    \"productPrice\": 1500,\n    \"totalPrice\": 30000,\n    \"productContent\": \"몸에 좋고 맛도 좋은 짜파게티\",\n    \"_links\": {\n        \"Prev-By-Cart-List\": {\n            \"href\": \"http://13.124.47.242:8084/carts?page=1\"\n        },\n        \"Create-Carts\": {\n            \"href\": \"http://13.124.47.242:8084/carts\"\n        },\n        \"Remove-Selected-Carts\": {\n            \"href\": \"http://13.124.47.242:8084/carts/23\"\n        },\n        \"Create-Purchase\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items\"\n        },\n        \"All-Purchase-List\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "장바구니 선택 삭제",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://13.124.47.242:8084/carts/1",
+							"protocol": "http",
+							"host": [
+								"13",
+								"124",
+								"47",
+								"242"
+							],
+							"port": "8084",
+							"path": [
+								"carts",
+								"1"
+							],
+							"query": [
+								{
+									"key": "{cartNo}",
+									"value": "1",
+									"description": "삭제할 장바구니 번호입니다.",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "장바구니 선택 삭제 응답",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "http://13.124.47.242:8084/carts/1",
+									"protocol": "http",
+									"host": [
+										"13",
+										"124",
+										"47",
+										"242"
+									],
+									"port": "8084",
+									"path": [
+										"carts",
+										"1"
+									],
+									"query": [
+										{
+											"key": "{cartNo}",
+											"value": "1",
+											"description": "삭제할 장바구니 번호입니다.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 22 Dec 2023 04:33:01 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "장바구니 전체 삭제",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": "http://13.124.47.242:8084/carts"
+					},
+					"response": [
+						{
+							"name": "장바구니 전체 삭제 응답",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"url": "http://13.124.47.242:8084/carts"
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 22 Dec 2023 04:33:29 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Purchases",
+			"item": [
+				{
+					"name": "장바구니 물품 구매",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cartNo\": 12, //구매할 장바구니 번호\r\n    \"userNo\": 1  //구매 유저 번호\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://13.124.47.242:8084/purchases-items"
+					},
+					"response": [
+						{
+							"name": "장바구니 물품 구매 응답",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cartNo\": 12, //구매할 장바구니 번호\r\n    \"userNo\": 1  //구매 유저 번호\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://13.124.47.242:8084/purchases-items"
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Dec 2023 04:37:47 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"information\": \"purchaseNo : 1\",\n    \"_links\": {\n        \"All-Purchases-List\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items\"\n        },\n        \"Selected-Purchases\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items/1\"\n        },\n        \"All-Products-List\": {\n            \"href\": \"http://13.124.47.242:8084/products\"\n        },\n        \"All-Carts-List\": {\n            \"href\": \"http://13.124.47.242:8084/carts\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "구매 목록 리스트",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://13.124.47.242:8084/purchases-items",
+							"protocol": "http",
+							"host": [
+								"13",
+								"124",
+								"47",
+								"242"
+							],
+							"port": "8084",
+							"path": [
+								"purchases-items"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "페이지 값을 생략할 경우 기본값 1이 할당됩니다.",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "구매 목록 리스트 응답",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://13.124.47.242:8084/purchases-items",
+									"protocol": "http",
+									"host": [
+										"13",
+										"124",
+										"47",
+										"242"
+									],
+									"port": "8084",
+									"path": [
+										"purchases-items"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "페이지 값을 생략할 경우 기본값 1이 할당됩니다.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 24 Dec 2023 04:42:33 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"_embedded\": {\n        \"purchasesDTOList\": [\n            {\n                \"postsNum\": 1,\n                \"purchasesItemsNo\": 11,\n                \"productNo\": 11,\n                \"productName\": \"노스페이스 패딩\",\n                \"productContent\": \"노스페이스 패딩 구스다운\",\n                \"quantity\": 20,\n                \"productPrice\": 100000,\n                \"totalPrice\": 2000000,\n                \"purchaseDate\": \"2023-12-22T04:39:01\",\n                \"_links\": {\n                    \"Selected-Purchases-Item\": {\n                        \"href\": \"http://13.124.47.242:8084/purchases-items/11?page=1\"\n                    }\n                }\n            },\n            {\n                \"postsNum\": 2,\n                \"purchasesItemsNo\": 10,\n                \"productNo\": 10,\n                \"productName\": \"청바지\",\n                \"productContent\": \"남성 청바지\",\n                \"quantity\": 20,\n                \"productPrice\": 10000,\n                \"totalPrice\": 200000,\n                \"purchaseDate\": \"2023-12-22T04:38:57\",\n                \"_links\": {\n                    \"Selected-Purchases-Item\": {\n                        \"href\": \"http://13.124.47.242:8084/purchases-items/10?page=1\"\n                    }\n                }\n            },\n            {\n                \"postsNum\": 3,\n                \"purchasesItemsNo\": 9,\n                \"productNo\": 9,\n                \"productName\": \"자바의 정석\",\n                \"productContent\": \"(베스트셀러)자바의 정석\",\n                \"quantity\": 20,\n                \"productPrice\": 10000,\n                \"totalPrice\": 200000,\n                \"purchaseDate\": \"2023-12-22T04:38:54\",\n                \"_links\": {\n                    \"Selected-Purchases-Item\": {\n                        \"href\": \"http://13.124.47.242:8084/purchases-items/9?page=1\"\n                    }\n                }\n            },\n            {\n                \"postsNum\": 4,\n                \"purchasesItemsNo\": 8,\n                \"productNo\": 8,\n                \"productName\": \"아이폰 15\",\n                \"productContent\": \"최신 아이폰 15\",\n                \"quantity\": 20,\n                \"productPrice\": 100000,\n                \"totalPrice\": 2000000,\n                \"purchaseDate\": \"2023-12-22T04:38:50\",\n                \"_links\": {\n                    \"Selected-Purchases-Item\": {\n                        \"href\": \"http://13.124.47.242:8084/purchases-items/8?page=1\"\n                    }\n                }\n            },\n            {\n                \"postsNum\": 5,\n                \"purchasesItemsNo\": 7,\n                \"productNo\": 7,\n                \"productName\": \"삼겹살 150g\",\n                \"productContent\": \"제주 흑돼지 삼겹살 150g\",\n                \"quantity\": 20,\n                \"productPrice\": 20000,\n                \"totalPrice\": 400000,\n                \"purchaseDate\": \"2023-12-22T04:38:47\",\n                \"_links\": {\n                    \"Selected-Purchases-Item\": {\n                        \"href\": \"http://13.124.47.242:8084/purchases-items/7?page=1\"\n                    }\n                }\n            },\n            {\n                \"postsNum\": 6,\n                \"purchasesItemsNo\": 6,\n                \"productNo\": 6,\n                \"productName\": \"백산수 100ml\",\n                \"productContent\": \"백산수 100ml\",\n                \"quantity\": 20,\n                \"productPrice\": 2000,\n                \"totalPrice\": 40000,\n                \"purchaseDate\": \"2023-12-22T04:38:43\",\n                \"_links\": {\n                    \"Selected-Purchases-Item\": {\n                        \"href\": \"http://13.124.47.242:8084/purchases-items/6?page=1\"\n                    }\n                }\n            },\n            {\n                \"postsNum\": 7,\n                \"purchasesItemsNo\": 5,\n                \"productNo\": 5,\n                \"productName\": \"볼펜\",\n                \"productContent\": \"모나미 볼펜\",\n                \"quantity\": 20,\n                \"productPrice\": 1000,\n                \"totalPrice\": 20000,\n                \"purchaseDate\": \"2023-12-22T04:38:40\",\n                \"_links\": {\n                    \"Selected-Purchases-Item\": {\n                        \"href\": \"http://13.124.47.242:8084/purchases-items/5?page=1\"\n                    }\n                }\n            },\n            {\n                \"postsNum\": 8,\n                \"purchasesItemsNo\": 4,\n                \"productNo\": 4,\n                \"productName\": \"중고 노트북\",\n                \"productContent\": \"LG gram 17인치 중고 노트북\",\n                \"quantity\": 20,\n                \"productPrice\": 100000,\n                \"totalPrice\": 2000000,\n                \"purchaseDate\": \"2023-12-22T04:38:37\",\n                \"_links\": {\n                    \"Selected-Purchases-Item\": {\n                        \"href\": \"http://13.124.47.242:8084/purchases-items/4?page=1\"\n                    }\n                }\n            },\n            {\n                \"postsNum\": 9,\n                \"purchasesItemsNo\": 3,\n                \"productNo\": 3,\n                \"productName\": \"선풍기\",\n                \"productContent\": \"시원한 선풍기\",\n                \"quantity\": 20,\n                \"productPrice\": 10000,\n                \"totalPrice\": 200000,\n                \"purchaseDate\": \"2023-12-22T04:38:33\",\n                \"_links\": {\n                    \"Selected-Purchases-Item\": {\n                        \"href\": \"http://13.124.47.242:8084/purchases-items/3?page=1\"\n                    }\n                }\n            },\n            {\n                \"postsNum\": 10,\n                \"purchasesItemsNo\": 2,\n                \"productNo\": 2,\n                \"productName\": \"신라면\",\n                \"productContent\": \"얼큰한 신라면\",\n                \"quantity\": 20,\n                \"productPrice\": 1500,\n                \"totalPrice\": 30000,\n                \"purchaseDate\": \"2023-12-22T04:38:27\",\n                \"_links\": {\n                    \"Selected-Purchases-Item\": {\n                        \"href\": \"http://13.124.47.242:8084/purchases-items/2?page=1\"\n                    }\n                }\n            }\n        ]\n    },\n    \"_links\": {\n        \"Start-Page\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items?page=1\"\n        },\n        \"Prev-Page\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items?page=1\"\n        },\n        \"Current-Page\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items?page=1\"\n        },\n        \"Next-Page\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items?page=2\"\n        },\n        \"End-Page\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items?page=2\"\n        },\n        \"All-Products-List\": {\n            \"href\": \"http://13.124.47.242:8084/products\"\n        },\n        \"All-Carts-List\": {\n            \"href\": \"http://13.124.47.242:8084/carts\"\n        },\n        \"Create-Purchase\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "구매 목록 상세 보기",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://13.124.47.242:8084/purchases-items/1",
+							"protocol": "http",
+							"host": [
+								"13",
+								"124",
+								"47",
+								"242"
+							],
+							"port": "8084",
+							"path": [
+								"purchases-items",
+								"1"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "이전의 페이지 번호 정보입니다.",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "구매 목록 상세 보기 응답",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://13.124.47.242:8084/purchases-items/1",
+									"protocol": "http",
+									"host": [
+										"13",
+										"124",
+										"47",
+										"242"
+									],
+									"port": "8084",
+									"path": [
+										"purchases-items",
+										"1"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "이전의 페이지 번호 정보입니다.",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Dec 2023 04:40:22 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"postsNum\": 1,\n    \"purchasesItemsNo\": 1,\n    \"productNo\": 1,\n    \"productName\": \"짜파게티\",\n    \"productContent\": \"몸에 좋고 맛도 좋은 짜파게티\",\n    \"quantity\": 20,\n    \"productPrice\": 1500,\n    \"totalPrice\": 30000,\n    \"purchaseDate\": \"2023-12-22T04:37:47\",\n    \"_links\": {\n        \"Create-Purchase\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items\"\n        },\n        \"Prev-By-Purchase-List\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items?page=1\"\n        },\n        \"All-Purchases-List\": {\n            \"href\": \"http://13.124.47.242:8084/purchases-items\"\n        },\n        \"All-Products-List\": {\n            \"href\": \"http://13.124.47.242:8084/products\"\n        },\n        \"All-Carts-List\": {\n            \"href\": \"http://13.124.47.242:8084/carts\"\n        }\n    }\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": {
+			"key": "X-API-Key",
+			"value": "{{token}}"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://farming-simulator.pstmn.io"
+		}
+	]
+}

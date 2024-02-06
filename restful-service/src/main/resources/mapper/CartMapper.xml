@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outliercart.restfulservice.repository.CartsDao">
+
+    <insert id="createdCarts" parameterType="CartsDTO" useGeneratedKeys="true" keyProperty="cartNo">
+        INSERT INTO CARTS
+        (user_no, product_no, product_quantity, cart_delete_status)
+        VALUES
+        (#{userNo}, #{productNo}, #{productQuantity}, 'Y')
+    </insert>
+
+    <update id="updateQuantityDecrease" parameterType="CartsDTO">
+        UPDATE PRODUCTS
+        SET product_quantity = product_quantity - #{productQuantity}
+        WHERE product_no = #{productNo}
+    </update>
+
+    <select id="allCartsCount" parameterType="long" resultType="int">
+        SELECT COUNT(*)
+        FROM CARTS
+        WHERE user_no = #{userNo}
+            AND cart_delete_status = 'Y'
+    </select>
+
+    <select id="allCartsItems" parameterType="PageInfo" resultType="CartItemsDTO">
+        SELECT ROW_NUMBER() OVER (ORDER BY c.cart_no DESC) AS cartNum,
+               c.cart_no ,
+               c.user_no ,
+               p.product_no ,
+               c.product_quantity ,
+               p.product_name ,
+               p.product_price ,
+               p.product_content ,
+               c.product_quantity * p.product_price AS totalPrice
+        FROM CARTS c
+        INNER JOIN PRODUCTS p on c.product_no = p.product_no
+        WHERE c.user_no = #{userNo}
+            AND c.cart_delete_status = 'Y'
+        LIMIT #{pageInfo.offset},#{pageInfo.pageLimit}
+    </select>
+
+    <select id="findByCartItem" parameterType="Map" resultType="CartsDTO">
+        SELECT *
+        FROM CARTS c
+        WHERE user_no = #{params.userNo}
+            AND cart_no = #{params.cartNo}
+            AND cart_delete_status = 'Y'
+    </select>
+
+    <update id="updateCartItemStatus" parameterType="Map">
+        UPDATE CARTS
+        SET cart_delete_status = 'N'
+        WHERE cart_no = #{params.cartNo}
+            AND user_no = #{params.userNo}
+            AND cart_delete_status = 'Y'
+    </update>
+
+    <update id="updateAllCartItemStatus" parameterType="long">
+        UPDATE CARTS
+        SET cart_delete_status = 'N'
+        WHERE user_no = #{userNo}
+            AND cart_delete_status = 'Y'
+    </update>
+
+    <select id="selectedCarts" parameterType="Map" resultType="CartItemsDTO">
+        SELECT  ROW_NUMBER() OVER (ORDER BY c.cart_no DESC) AS cartNum,
+                c.cart_no ,
+                c.user_no ,
+                p.product_no ,
+                c.product_quantity ,
+                p.product_name ,
+                p.product_price ,
+                p.product_content ,
+                c.product_quantity * p.product_price AS totalPrice
+        FROM CARTS c
+        INNER JOIN PRODUCTS p on c.product_no = p.product_no
+        WHERE c.user_no = #{params.userNo}
+            AND c.cart_delete_status = 'Y'
+            AND c.cart_no = #{params.cartNo}
+    </select>
+
+</mapper>

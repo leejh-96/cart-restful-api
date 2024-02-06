@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outliercart.restfulservice.repository.ProductsDao">
+
+    <sql id="searchSql">
+        <if test="searchType != null and searchType != '' and searchContent != null and searchContent != ''">
+            <if test="searchType == 'productName'">
+                <!-- product_name 검색 조건 -->
+                WHERE product_name LIKE CONCAT('%', #{searchContent}, '%')
+            </if>
+            <if test="searchType == 'productPrice'">
+                <!-- product_price 검색 조건 -->
+                WHERE product_price LIKE CONCAT('%', #{searchContent}, '%')
+            </if>
+            <if test="searchType == 'productContent'">
+                <!-- product_content 검색 조건 -->
+                WHERE product_content LIKE CONCAT('%', #{searchContent}, '%')
+            </if>
+        </if>
+        <if test="searchType == null or searchType == ''">
+                <!-- 검색 내용만 작성한 조건 -->
+            <if test="searchContent != null">
+                WHERE CONCAT(product_name, product_price, product_content) LIKE CONCAT('%', #{searchContent}, '%')
+            </if>
+        </if>
+    </sql>
+
+    <insert id="createdProducts" parameterType="ProductsDTO" useGeneratedKeys="true" keyProperty="productNo">
+        INSERT INTO PRODUCTS
+        (product_name, product_price, product_quantity, product_content)
+        VALUES
+        (#{productName}, #{productPrice}, #{productQuantity}, #{productContent})
+    </insert>
+
+    <select id="allProductsCount" parameterType="PageInfo" resultType="int">
+        SELECT COUNT(*)
+        FROM PRODUCTS
+        <include refid="searchSql"/>
+    </select>
+
+    <select id="allProductsPosts" parameterType="PageInfo" resultType="ProductsDTO">
+        SELECT ROW_NUMBER() OVER (ORDER BY p.product_no DESC) AS productNum,
+               p.*
+        FROM PRODUCTS p
+        <include refid="searchSql"/>
+        LIMIT #{offset},#{pageLimit}
+    </select>
+
+    <select id="selectedProducts" parameterType="int" resultType="ProductsDTO">
+        SELECT *
+        FROM PRODUCTS
+        WHERE product_no = #{productNo}
+    </select>
+
+    <select id="findByProduct" parameterType="int" resultType="CartsDTO">
+        SELECT  COUNT(*) as count,
+                product_no,
+                product_quantity
+        FROM PRODUCTS
+        WHERE product_no = #{productNo}
+    </select>
+
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outliercart.restfulservice.repository.PurchasesDao">
+
+    <select id="findByCartItems" parameterType="PurchaseItemDTO" resultType="PurchaseItemDTO">
+        SELECT  c.cart_no ,
+                c.user_no ,
+                c.product_no ,
+                c.product_quantity as cart_quantity ,
+                p.product_price ,
+                p.product_quantity
+        FROM CARTS c
+        INNER JOIN PRODUCTS p on c.product_no = p.product_no
+        INNER JOIN `USER` u  on c.user_no = u.user_no
+        WHERE c.user_no = #{userNo}
+            AND c.cart_no = #{cartNo}
+            AND c.cart_delete_status = 'Y'
+    </select>
+
+    <insert id="createdPurchases" parameterType="PurchaseItemDTO" useGeneratedKeys="true" keyProperty="purchasesItemsNo">
+        INSERT INTO PURCHASEITEM
+        (user_no, cart_no, purchase_date)
+        VALUES
+        (#{userNo}, #{cartNo}, #{purchaseDate})
+    </insert>
+
+    <update id="updateProductQuantity" parameterType="PurchaseItemDTO">
+        UPDATE PRODUCTS
+        SET product_quantity =  product_quantity - #{cartQuantity}
+        WHERE product_no = #{productNo}
+    </update>
+
+    <update id="updateCartsStatus" parameterType="PurchaseItemDTO">
+        UPDATE CARTS
+        SET cart_delete_status = 'N'
+        WHERE cart_no = #{cartNo}
+    </update>
+
+    <select id="allPurchasesCount" parameterType="long" resultType="int">
+        SELECT COUNT(*)
+        FROM PURCHASEITEM
+        WHERE user_no = #{userNo}
+    </select>
+
+    <select id="allPurchasesList" parameterType="PageInfo" resultType="PurchasesDTO">
+        SELECT  ROW_NUMBER() OVER (ORDER BY p.purchaseitem_no DESC) AS postsNum,
+                p.purchaseitem_no AS purchasesItemsNo,
+                p.purchase_date ,
+                c.product_no ,
+                c.product_quantity AS quantity,
+                p2.product_name ,
+                p2.product_price ,
+                p2.product_content ,
+                c.product_quantity * p2.product_price AS totalPrice
+        FROM PURCHASEITEM p
+        INNER JOIN CARTS c ON p.cart_no = c.cart_no
+        INNER JOIN PRODUCTS p2 ON p2.product_no = c.product_no
+        WHERE p.user_no = #{userNo}
+            AND c.cart_delete_status = 'N'
+        LIMIT #{pageInfo.offset},#{pageInfo.pageLimit}
+    </select>
+
+    <select id="selectedPurchases" parameterType="Map" resultType="PurchasesDTO">
+        SELECT  ROW_NUMBER() OVER (ORDER BY p.purchaseitem_no DESC) AS postsNum,
+                p.purchaseitem_no AS purchasesItemsNo,
+                p.purchase_date ,
+                c.product_no ,
+                c.product_quantity AS quantity,
+                p2.product_name ,
+                p2.product_price ,
+                p2.product_content ,
+                c.product_quantity * p2.product_price AS totalPrice
+        FROM PURCHASEITEM p
+        INNER JOIN CARTS c ON p.cart_no = c.cart_no
+        INNER JOIN PRODUCTS p2 ON p2.product_no = c.product_no
+        WHERE p.user_no = #{params.userNo}
+            AND c.cart_delete_status = 'N'
+            AND p.purchaseitem_no = #{params.purchasesItemsNo}
+    </select>
+
+</mapper>
